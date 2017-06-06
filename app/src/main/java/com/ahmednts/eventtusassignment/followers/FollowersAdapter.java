@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ahmednts.eventtusassignment.R;
+import com.ahmednts.eventtusassignment.utils.CircleTransform;
 import com.squareup.picasso.Picasso;
 import com.twitter.sdk.android.core.models.User;
 
@@ -65,7 +66,10 @@ public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.Popu
             profileHandle.setText(follower.screenName);
             profileBio.setText(follower.description);
 
-            Picasso.with(itemView.getContext()).load(follower.profileImageUrlHttps).fit().centerCrop().into(profileImage);
+            Picasso.with(itemView.getContext())
+                    .load(follower.profileImageUrlHttps)
+                    .transform(new CircleTransform())
+                    .fit().centerCrop().into(profileImage);
 
             itemView.setOnClickListener(v -> followerItemClickListener.onFollowerClick(follower));
         }
