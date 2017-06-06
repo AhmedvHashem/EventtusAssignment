@@ -12,6 +12,8 @@ interface FollowersContract {
     interface View {
         void showFollowers(List<User> users);
 
+        void openFollowerDetailsUI();
+
         void showIndicator();
 
         void hideIndicator();

@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.ahmednts.eventtusassignment.data.FollowersResponse;
 import com.ahmednts.eventtusassignment.data.MyTwitterApiClient;
+import com.ahmednts.eventtusassignment.utils.Logger;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterException;
@@ -30,9 +31,11 @@ public class FollowersPresenter implements FollowersContract.Presenter {
 
     @Override
     public void loadFollowersList(long userId) {
+        Logger.withTag(TAG).log("loadFollowersList: " + userId);
+
         followersView.showIndicator();
 
-        apiClient.getTwitterCustomService().followers(737835558).enqueue(new Callback<FollowersResponse>() {
+        apiClient.getTwitterCustomService().followers(userId).enqueue(new Callback<FollowersResponse>() {
             @Override
             public void success(Result<FollowersResponse> result) {
                 if (result != null) {
@@ -54,7 +57,7 @@ public class FollowersPresenter implements FollowersContract.Presenter {
 
     @Override
     public void openFollowerDetails(User follower) {
-
+        followersView.openFollowerDetailsUI();
     }
 
     void getProfileDetails(long userId) {

@@ -34,10 +34,9 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
 
         initUI();
 
-        MyTwitterApiClient myTwitterApiClient;
         TwitterSession session = TwitterCore.getInstance().getSessionManager().getActiveSession();
         if (session != null) {
-            myTwitterApiClient = new MyTwitterApiClient(session);
+            MyTwitterApiClient myTwitterApiClient = new MyTwitterApiClient(session);
             TwitterCore.getInstance().addApiClient(session, myTwitterApiClient);
 
             followersPresenter = new FollowersPresenter(myTwitterApiClient, this);
@@ -70,6 +69,11 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
     public void showFollowers(List<User> users) {
         FollowersAdapter rcAdapter = new FollowersAdapter(users, followerItemClickListener);
         recyclerView.setAdapter(rcAdapter);
+    }
+
+    @Override
+    public void openFollowerDetailsUI() {
+
     }
 
     @Override

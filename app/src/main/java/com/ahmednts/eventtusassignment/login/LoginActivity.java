@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 
 import com.ahmednts.eventtusassignment.R;
+import com.ahmednts.eventtusassignment.followers.FollowersActivity;
 import com.ahmednts.eventtusassignment.utils.Logger;
 import com.twitter.sdk.android.core.identity.TwitterAuthClient;
 
@@ -42,12 +43,14 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         loginPresenter.onActivityResult(requestCode, resultCode, data);
     }
 
-
-
     @Override
     public void showFollowers(long userId) {
         //open followers activity
 
         Logger.withTag(TAG).log("showFollowers: " + userId);
+
+        Intent intent = new Intent(this, FollowersActivity.class);
+        startActivity(intent);
+        finish();
     }
 }
