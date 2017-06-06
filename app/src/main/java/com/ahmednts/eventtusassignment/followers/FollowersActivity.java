@@ -54,7 +54,7 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
         }
 
         toolbarTitle = (TextView) findViewById(R.id.toolbar_title);
-//        toolbarTitle.setText(getResources().getString(R.string.popular_movies));
+        toolbarTitle.setText("Followers");
         errorMessage = (TextView) findViewById(R.id.errorMessage);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         UIUtils.setProgressBarColor(this, progressBar, R.color.colorAccent);
