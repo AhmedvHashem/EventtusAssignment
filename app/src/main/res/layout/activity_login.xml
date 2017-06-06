@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ahmednts.eventtusassignment.login.LoginActivity">
+
+    <Button
+        android:id="@+id/login_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/tw__login_btn"
+        android:drawablePadding="@dimen/tw__login_btn_drawable_padding"
+        android:drawableStart="@drawable/tw__ic_logo_default"
+        android:paddingEnd="@dimen/tw__login_btn_right_padding"
+        android:paddingStart="@dimen/tw__login_btn_left_padding"
+        android:text="Log in with Twitter"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white" />
+
+</FrameLayout>
