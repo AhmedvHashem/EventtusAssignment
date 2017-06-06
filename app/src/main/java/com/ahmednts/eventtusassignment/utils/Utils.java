@@ -10,9 +10,12 @@ import android.widget.TextView;
 public class Utils {
 
     public static void setText(TextView textView, String text, boolean hideIfEmpty) {
-        if ((text == null || text.isEmpty()) && hideIfEmpty)
-            textView.setVisibility(View.GONE);
-        else
-            textView.setText(text);
+        if (text != null) {
+            if (text.isEmpty() && hideIfEmpty)
+                textView.setVisibility(View.GONE);
+            else
+                textView.setText(text);
+        } else
+            textView.setText("");
     }
 }
