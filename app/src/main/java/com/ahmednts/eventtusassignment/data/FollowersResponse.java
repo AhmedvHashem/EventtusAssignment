@@ -1,4 +1,4 @@
-package com.ahmednts.eventtusassignment;
+package com.ahmednts.eventtusassignment.data;
 
 import com.twitter.sdk.android.core.models.User;
 
@@ -8,7 +8,7 @@ import java.util.List;
  * Created by AhmedNTS on 6/5/2017.
  */
 
-public class FollowerObject {
+public class FollowersResponse {
 
     public List<User> users;
 

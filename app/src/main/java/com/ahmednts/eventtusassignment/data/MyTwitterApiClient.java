@@ -19,7 +19,7 @@ public class MyTwitterApiClient extends TwitterApiClient {
     /**
      * Provide CustomService with defined endpoints
      */
-    public TwitterCustomService getTwitterCustomService() {
-        return getService(TwitterCustomService.class);
+    public MyTwitterCustomService getTwitterCustomService() {
+        return getService(MyTwitterCustomService.class);
     }
 }

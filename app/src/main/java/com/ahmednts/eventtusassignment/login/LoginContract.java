@@ -1,6 +1,5 @@
 package com.ahmednts.eventtusassignment.login;
 
-
 import android.content.Intent;
 
 /**

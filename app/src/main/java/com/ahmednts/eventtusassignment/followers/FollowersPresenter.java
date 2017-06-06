@@ -1,0 +1,74 @@
+package com.ahmednts.eventtusassignment.followers;
+
+import android.util.Log;
+
+import com.ahmednts.eventtusassignment.data.FollowersResponse;
+import com.ahmednts.eventtusassignment.data.MyTwitterApiClient;
+import com.twitter.sdk.android.core.Callback;
+import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.TwitterException;
+import com.twitter.sdk.android.core.models.User;
+
+import retrofit2.Call;
+import retrofit2.Response;
+
+/**
+ * Created by AhmedNTS on 6/6/2017.
+ */
+
+public class FollowersPresenter implements FollowersContract.Presenter {
+    public static final String TAG = FollowersPresenter.class.getSimpleName();
+
+    private MyTwitterApiClient apiClient;
+
+    private FollowersContract.View followersView;
+
+    public FollowersPresenter(MyTwitterApiClient apiClient, FollowersContract.View followersView) {
+        this.apiClient = apiClient;
+        this.followersView = followersView;
+    }
+
+    @Override
+    public void loadFollowersList(long userId) {
+        followersView.showIndicator();
+
+        apiClient.getTwitterCustomService().followers(737835558).enqueue(new Callback<FollowersResponse>() {
+            @Override
+            public void success(Result<FollowersResponse> result) {
+                if (result != null) {
+                    if (result.data.users != null && result.data.users.size() > 0) {
+                        followersView.hideIndicator();
+                        followersView.showFollowers(result.data.users);
+                    } else {
+                        followersView.showErrorMessage("You have no followers! Yet");
+                    }
+                }
+            }
+
+            @Override
+            public void failure(TwitterException exception) {
+                exception.printStackTrace();
+            }
+        });
+    }
+
+    @Override
+    public void openFollowerDetails(User follower) {
+
+    }
+
+    void getProfileDetails(long userId) {
+
+        apiClient.getTwitterCustomService().show(userId).enqueue(new retrofit2.Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                Log.w(TAG, "success: " + response.body().name);
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+
+            }
+        });
+    }
+}
