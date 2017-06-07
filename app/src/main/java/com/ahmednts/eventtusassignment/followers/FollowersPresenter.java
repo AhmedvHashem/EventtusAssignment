@@ -24,6 +24,8 @@ public class FollowersPresenter implements FollowersContract.Presenter {
 
     private FollowersContract.View followersView;
 
+    private boolean firstLoad = true;
+
     public FollowersPresenter(MyTwitterApiClient apiClient, FollowersContract.View followersView) {
         this.apiClient = apiClient;
         this.followersView = followersView;
@@ -58,20 +60,5 @@ public class FollowersPresenter implements FollowersContract.Presenter {
     @Override
     public void openFollowerDetails(User follower) {
         followersView.openFollowerDetailsUI();
-    }
-
-    void getProfileDetails(long userId) {
-
-        apiClient.getTwitterCustomService().show(userId).enqueue(new retrofit2.Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                Log.w(TAG, "success: " + response.body().name);
-            }
-
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-
-            }
-        });
     }
 }

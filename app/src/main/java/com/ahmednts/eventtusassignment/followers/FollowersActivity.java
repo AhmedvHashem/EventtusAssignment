@@ -1,16 +1,19 @@
 package com.ahmednts.eventtusassignment.followers;
 
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.ahmednts.eventtusassignment.R;
 import com.ahmednts.eventtusassignment.data.MyTwitterApiClient;
+import com.ahmednts.eventtusassignment.utils.EndlessRecyclerViewScrollListener;
 import com.ahmednts.eventtusassignment.utils.UIUtils;
 import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.core.TwitterSession;
@@ -25,8 +28,15 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
     private TextView errorMessage;
     private ProgressBar progressBar;
     private RecyclerView recyclerView;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     private FollowersContract.Presenter followersPresenter;
+
+    long userId;
+
+    boolean isLoading;
+    int pageIndex = 1;
+    int pageSize = 50;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +50,7 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
             TwitterCore.getInstance().addApiClient(session, myTwitterApiClient);
 
             followersPresenter = new FollowersPresenter(myTwitterApiClient, this);
-            followersPresenter.loadFollowersList(session.getUserId());
+            followersPresenter.loadFollowersList(userId = session.getUserId());
         }
     }
 
@@ -58,11 +68,17 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
         errorMessage = (TextView) findViewById(R.id.errorMessage);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         UIUtils.setProgressBarColor(this, progressBar, R.color.colorAccent);
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         recyclerView = (RecyclerView) findViewById(R.id.popularMoviesRecyclerView);
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setHasFixedSize(false);
         recyclerView.setLayoutManager(layoutManager);
+
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+                    followersPresenter.loadFollowersList(userId);
+                }
+        );
+
     }
 
     @Override
@@ -78,6 +94,7 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
 
     @Override
     public void showIndicator() {
+        isLoading = true;
         recyclerView.setVisibility(android.view.View.GONE);
         errorMessage.setVisibility(android.view.View.GONE);
         progressBar.setVisibility(android.view.View.VISIBLE);
@@ -85,9 +102,11 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
 
     @Override
     public void hideIndicator() {
+        isLoading = false;
         progressBar.setVisibility(android.view.View.GONE);
         errorMessage.setVisibility(android.view.View.GONE);
         recyclerView.setVisibility(android.view.View.VISIBLE);
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override

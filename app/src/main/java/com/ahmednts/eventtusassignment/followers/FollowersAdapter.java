@@ -29,7 +29,7 @@ public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.Popu
 
     @Override
     public PopularMovieViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        android.view.View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_follower, null);
+        android.view.View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_follower, parent, false);
         return new PopularMovieViewHolder(layoutView, followerItemClickListener);
     }
 
