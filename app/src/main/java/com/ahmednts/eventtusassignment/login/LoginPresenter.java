@@ -32,7 +32,6 @@ public class LoginPresenter implements LoginContract.Presenter {
 
     @Override
     public void authenticate() {
-
         authClient.authorize(activity, new Callback<TwitterSession>() {
             @Override
             public void success(Result<TwitterSession> result) {
@@ -50,5 +49,10 @@ public class LoginPresenter implements LoginContract.Presenter {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         authClient.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void stop() {
+        authClient.cancelAuthorize();
     }
 }

@@ -1,4 +1,4 @@
-package com.ahmednts.eventtusassignment.data;
+package com.ahmednts.eventtusassignment.data.responses;
 
 import com.twitter.sdk.android.core.models.User;
 

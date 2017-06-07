@@ -1,6 +1,6 @@
 package com.ahmednts.eventtusassignment.followers;
 
-import com.ahmednts.eventtusassignment.data.FollowersResponse;
+import com.ahmednts.eventtusassignment.data.responses.FollowersResponse;
 import com.ahmednts.eventtusassignment.data.MyTwitterApiClient;
 import com.ahmednts.eventtusassignment.utils.Logger;
 import com.twitter.sdk.android.core.Callback;
@@ -13,6 +13,8 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+
 /**
  * Created by AhmedNTS on 6/6/2017.
  */
@@ -24,6 +26,7 @@ public class FollowersPresenter implements FollowersContract.Presenter {
 
     private FollowersContract.View followersView;
 
+    private Call<FollowersResponse> followersResponseCall;
     private long nextCursor = -1;
     private List<User> followers;
 
@@ -50,7 +53,9 @@ public class FollowersPresenter implements FollowersContract.Presenter {
         }
 
         Logger.getInstance().withTag(TAG).log("loadFollowersList: nextCursor=" + nextCursor);
-        apiClient.getTwitterCustomService().followers(userId, nextCursor).enqueue(new Callback<FollowersResponse>() {
+
+        followersResponseCall = apiClient.getTwitterCustomService().followers(userId, nextCursor);
+        followersResponseCall.enqueue(new Callback<FollowersResponse>() {
             @Override
             public void success(Result<FollowersResponse> result) {
                 if (result != null) {
@@ -85,5 +90,10 @@ public class FollowersPresenter implements FollowersContract.Presenter {
     @Override
     public void openFollowerDetails(User follower) {
         followersView.openFollowerDetailsUI();
+    }
+
+    @Override
+    public void stop() {
+        followersResponseCall.cancel();
     }
 }

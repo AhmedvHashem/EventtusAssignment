@@ -15,5 +15,7 @@ interface LoginContract {
         void authenticate();
 
         void onActivityResult(int requestCode, int resultCode, Intent data);
+
+        void stop();
     }
 }

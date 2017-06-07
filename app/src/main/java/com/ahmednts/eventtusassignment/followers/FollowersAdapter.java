@@ -74,6 +74,7 @@ public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.Popu
 
             Picasso.with(itemView.getContext())
                     .load(follower.profileImageUrlHttps)
+                    .placeholder(R.drawable.tw__ic_logo_default)
                     .transform(new CircleTransform())
                     .fit().centerCrop().into(profileImage);
 

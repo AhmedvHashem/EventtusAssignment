@@ -32,6 +32,13 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         });
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        loginPresenter.stop();
+    }
+
     void initUI() {
         loginButton = (Button) findViewById(R.id.login_button);
     }

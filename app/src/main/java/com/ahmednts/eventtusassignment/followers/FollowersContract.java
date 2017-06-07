@@ -27,6 +27,9 @@ interface FollowersContract {
 
     interface Presenter {
         void loadFollowersList(long userId, boolean reload);
+
         void openFollowerDetails(User follower);
+
+        void stop();
     }
 }

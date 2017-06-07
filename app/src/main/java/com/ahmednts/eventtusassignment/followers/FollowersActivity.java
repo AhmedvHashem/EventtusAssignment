@@ -39,8 +39,6 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
     long userId;
 
     boolean isLoading;
-    int pageIndex = 1;
-    int pageSize = 50;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +54,13 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
             followersPresenter = new FollowersPresenter(myTwitterApiClient, this);
             followersPresenter.loadFollowersList(userId = session.getUserId(), true);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        followersPresenter.stop();
     }
 
     void initUI() {
