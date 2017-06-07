@@ -79,7 +79,7 @@ public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.Popu
                     .fit().centerCrop().into(profileImage);
 
             Utils.setText(profileFullName, follower.name, false);
-            Utils.setText(profileHandle, follower.screenName, false);
+            Utils.setText(profileHandle, "@" + follower.screenName, false);
             Utils.setText(profileBio, follower.description, true);
 
             itemView.setOnClickListener(v -> followerItemClickListener.onFollowerClick(follower));

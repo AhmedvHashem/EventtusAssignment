@@ -36,7 +36,7 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
     private FollowersContract.Presenter followersPresenter;
 
     FollowersAdapter rcAdapter;
-    long userId;
+    TwitterSession session;
 
     boolean isLoading;
 
@@ -46,13 +46,13 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
 
         initUI();
 
-        TwitterSession session = TwitterCore.getInstance().getSessionManager().getActiveSession();
+        session = TwitterCore.getInstance().getSessionManager().getActiveSession();
         if (session != null) {
             MyTwitterApiClient myTwitterApiClient = new MyTwitterApiClient(getApplicationContext(), session);
             TwitterCore.getInstance().addApiClient(session, myTwitterApiClient);
 
             followersPresenter = new FollowersPresenter(myTwitterApiClient, this);
-            followersPresenter.loadFollowersList(userId = session.getUserId(), true);
+            followersPresenter.loadFollowersList(session.getUserId(), true);
         }
     }
 
@@ -73,7 +73,6 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
         }
 
         toolbarTitle = (TextView) findViewById(R.id.toolbar_title);
-        toolbarTitle.setText("Followers");
         errorMessage = (TextView) findViewById(R.id.errorMessage);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         UIUtils.setProgressBarColor(this, progressBar, R.color.colorAccent);
@@ -86,7 +85,7 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
         recyclerView.setAdapter(rcAdapter);
 
         swipeRefreshLayout.setOnRefreshListener(() -> {
-                    followersPresenter.loadFollowersList(userId, true);
+                    followersPresenter.loadFollowersList(session.getUserId(), true);
                 }
         );
 
@@ -95,7 +94,7 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
             public void onLoadMore(final int page, int totalItemsCount) {
                 Log.w(TAG, "onLoadMore= " + page);
                 isLoading = true;
-                followersPresenter.loadFollowersList(userId, false);
+                followersPresenter.loadFollowersList(session.getUserId(), false);
             }
 
             @Override
@@ -107,6 +106,8 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
 
     @Override
     public void showFollowers(List<User> users) {
+        toolbarTitle.setText("@" + session.getUserName() + "'s Followers");
+
         rcAdapter.replaceData(users);
         rcAdapter.notifyDataSetChanged();
     }
