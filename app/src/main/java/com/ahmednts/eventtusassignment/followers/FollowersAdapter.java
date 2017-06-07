@@ -43,6 +43,15 @@ public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.Popu
         return this.itemList.size();
     }
 
+    public void replaceData(List<User> users) {
+        setList(users);
+        notifyDataSetChanged();
+    }
+
+    private void setList(List<User> users) {
+        itemList = users;
+    }
+
     static class PopularMovieViewHolder extends RecyclerView.ViewHolder {
 
         ImageView profileImage;

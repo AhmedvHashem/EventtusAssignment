@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ahmednts.eventtusassignment.R;
 import com.ahmednts.eventtusassignment.data.MyTwitterApiClient;
@@ -19,6 +20,7 @@ import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.models.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FollowersActivity extends AppCompatActivity implements FollowersContract.View {
@@ -32,6 +34,7 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
 
     private FollowersContract.Presenter followersPresenter;
 
+    FollowersAdapter rcAdapter;
     long userId;
 
     boolean isLoading;
@@ -50,7 +53,7 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
             TwitterCore.getInstance().addApiClient(session, myTwitterApiClient);
 
             followersPresenter = new FollowersPresenter(myTwitterApiClient, this);
-            followersPresenter.loadFollowersList(userId = session.getUserId());
+            followersPresenter.loadFollowersList(userId = session.getUserId(), true);
         }
     }
 
@@ -73,18 +76,33 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setHasFixedSize(false);
         recyclerView.setLayoutManager(layoutManager);
+        rcAdapter = new FollowersAdapter(new ArrayList<>(0), followerItemClickListener);
+        recyclerView.setAdapter(rcAdapter);
 
         swipeRefreshLayout.setOnRefreshListener(() -> {
-                    followersPresenter.loadFollowersList(userId);
+                    followersPresenter.loadFollowersList(userId, true);
                 }
         );
 
+        recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager, 0) {
+            @Override
+            public void onLoadMore(final int page, int totalItemsCount) {
+                Log.w(TAG, "onLoadMore= " + page);
+                isLoading = true;
+                followersPresenter.loadFollowersList(userId, false);
+            }
+
+            @Override
+            public boolean isLoading() {
+                return isLoading;
+            }
+        });
     }
 
     @Override
     public void showFollowers(List<User> users) {
-        FollowersAdapter rcAdapter = new FollowersAdapter(users, followerItemClickListener);
-        recyclerView.setAdapter(rcAdapter);
+        rcAdapter.replaceData(users);
+        rcAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -94,7 +112,7 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
 
     @Override
     public void showIndicator() {
-        isLoading = true;
+
         recyclerView.setVisibility(android.view.View.GONE);
         errorMessage.setVisibility(android.view.View.GONE);
         progressBar.setVisibility(android.view.View.VISIBLE);
@@ -116,6 +134,12 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
         errorMessage.setVisibility(android.view.View.VISIBLE);
         errorMessage.setText(msg);
     }
+
+    @Override
+    public void showToastMessage(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
 
     FollowersAdapter.FollowerItemClickListener followerItemClickListener = follower -> {
         followersPresenter.openFollowerDetails(follower);

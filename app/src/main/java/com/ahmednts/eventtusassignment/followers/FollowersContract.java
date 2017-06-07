@@ -19,10 +19,12 @@ interface FollowersContract {
         void hideIndicator();
 
         void showErrorMessage(String msg);
+
+        void showToastMessage(String msg);
     }
 
     interface Presenter {
-        void loadFollowersList(long userId);
+        void loadFollowersList(long userId, boolean reload);
         void openFollowerDetails(User follower);
     }
 }
