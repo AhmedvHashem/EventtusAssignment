@@ -7,14 +7,12 @@ package com.ahmednts.eventtusassignment.data;
 import com.twitter.sdk.android.core.TwitterApiClient;
 import com.twitter.sdk.android.core.TwitterSession;
 
+import okhttp3.OkHttpClient;
+
 public class MyTwitterApiClient extends TwitterApiClient {
 
-    public MyTwitterApiClient() {
-        super();
-    }
-
-    public MyTwitterApiClient(TwitterSession session) {
-        super(session);
+    public MyTwitterApiClient(TwitterSession session, OkHttpClient okHttpClient) {
+        super(session, okHttpClient);
     }
 
     /**

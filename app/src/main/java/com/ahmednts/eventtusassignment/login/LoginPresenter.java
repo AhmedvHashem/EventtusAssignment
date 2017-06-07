@@ -36,13 +36,13 @@ public class LoginPresenter implements LoginContract.Presenter {
         authClient.authorize(activity, new Callback<TwitterSession>() {
             @Override
             public void success(Result<TwitterSession> result) {
-                Logger.withTag(TAG).log("success: " + result.data.getAuthToken().toString());
+                Logger.getInstance().withTag(TAG).log("success: " + result.data.getAuthToken().toString());
                 loginView.showFollowers(result.data.getUserId());
             }
 
             @Override
             public void failure(TwitterException exception) {
-                Logger.withTag(TAG).log("failure: " + exception.getMessage());
+                Logger.getInstance().withTag(TAG).log("failure: " + exception.getMessage());
             }
         });
     }

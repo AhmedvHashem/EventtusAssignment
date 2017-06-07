@@ -3,6 +3,7 @@ package com.ahmednts.eventtusassignment;
 import android.app.Application;
 import android.util.Log;
 
+import com.facebook.stetho.Stetho;
 import com.twitter.sdk.android.core.DefaultLogger;
 import com.twitter.sdk.android.core.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
@@ -18,6 +19,7 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Stetho.initializeWithDefaults(this);
 
         instance = this;
 

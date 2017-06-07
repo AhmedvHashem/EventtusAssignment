@@ -24,7 +24,7 @@ public class FollowersPresenter implements FollowersContract.Presenter {
     private FollowersContract.View followersView;
 
     private boolean firstLoad = true;
-
+    private long nextCursor = -1;
     private List<User> followers;
 
     public FollowersPresenter(MyTwitterApiClient apiClient, FollowersContract.View followersView) {
@@ -36,17 +36,26 @@ public class FollowersPresenter implements FollowersContract.Presenter {
 
     @Override
     public void loadFollowersList(long userId, boolean reload) {
-        Logger.withTag(TAG).log("loadFollowersList: " + userId);
+        Logger.getInstance().withTag(TAG).log("loadFollowersList: userId=" + userId);
 
         if (reload) {
+            nextCursor = -1;
             followersView.showIndicator();
             followers.clear();
         }
-        apiClient.getTwitterCustomService().followers(userId).enqueue(new Callback<FollowersResponse>() {
+
+        if (nextCursor == 0)
+            return;
+
+        Logger.getInstance().withTag(TAG).log("loadFollowersList: nextCursor=" + nextCursor);
+        apiClient.getTwitterCustomService().followers(userId, nextCursor).enqueue(new Callback<FollowersResponse>() {
             @Override
             public void success(Result<FollowersResponse> result) {
                 if (result != null) {
                     if (result.data.users != null && result.data.users.size() > 0) {
+                        nextCursor = result.data.next_cursor;
+                        Logger.getInstance().withTag(TAG).log("loadFollowersList: nextCursor=" + nextCursor);
+
                         followers.addAll(result.data.users);
 
                         followersView.hideIndicator();

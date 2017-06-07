@@ -12,8 +12,8 @@ public class FollowersResponse {
 
     public List<User> users;
 
-    public int nextCursor;
-    public String nextCursorStr;
-    public int previousCursor;
-    public String previousCursorStr;
+    public long next_cursor;
+    public long previous_cursor;
+    public String next_cursor_str;
+    public String previous_cursor_str;
 }

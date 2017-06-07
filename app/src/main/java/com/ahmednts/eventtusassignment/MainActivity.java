@@ -23,13 +23,13 @@ public class MainActivity extends AppCompatActivity {
 
         Map<Long, TwitterSession> sessions = TwitterCore.getInstance().getSessionManager().getSessionMap();
         for (Long s : sessions.keySet()) {
-            Logger.withTag(TAG).log("getSessionMap: " + s);
+            Logger.getInstance().withTag(TAG).log("getSessionMap: " + s);
         }
 
         TwitterSession session = TwitterCore.getInstance().getSessionManager().getActiveSession();
         if (session != null) {
             TwitterAuthToken authToken = session.getAuthToken();
-            Logger.withTag(TAG).log("success: " + authToken.toString());
+            Logger.getInstance().withTag(TAG).log("success: " + authToken.toString());
 
             Intent intent = new Intent(this, FollowersActivity.class);
             startActivity(intent);

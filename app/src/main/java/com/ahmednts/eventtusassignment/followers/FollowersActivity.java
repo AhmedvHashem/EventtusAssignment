@@ -16,12 +16,15 @@ import com.ahmednts.eventtusassignment.R;
 import com.ahmednts.eventtusassignment.data.MyTwitterApiClient;
 import com.ahmednts.eventtusassignment.utils.EndlessRecyclerViewScrollListener;
 import com.ahmednts.eventtusassignment.utils.UIUtils;
+import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.models.User;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.OkHttpClient;
 
 public class FollowersActivity extends AppCompatActivity implements FollowersContract.View {
     private static final String TAG = FollowersActivity.class.getSimpleName();
@@ -49,7 +52,9 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
 
         TwitterSession session = TwitterCore.getInstance().getSessionManager().getActiveSession();
         if (session != null) {
-            MyTwitterApiClient myTwitterApiClient = new MyTwitterApiClient(session);
+            OkHttpClient okHttpClient = new OkHttpClient.Builder().addNetworkInterceptor(new StethoInterceptor()).build();
+
+            MyTwitterApiClient myTwitterApiClient = new MyTwitterApiClient(session, okHttpClient);
             TwitterCore.getInstance().addApiClient(session, myTwitterApiClient);
 
             followersPresenter = new FollowersPresenter(myTwitterApiClient, this);
@@ -112,7 +117,6 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
 
     @Override
     public void showIndicator() {
-
         recyclerView.setVisibility(android.view.View.GONE);
         errorMessage.setVisibility(android.view.View.GONE);
         progressBar.setVisibility(android.view.View.VISIBLE);
@@ -129,6 +133,7 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
 
     @Override
     public void showErrorMessage(String msg) {
+        isLoading = false;
         progressBar.setVisibility(android.view.View.GONE);
         recyclerView.setVisibility(android.view.View.GONE);
         errorMessage.setVisibility(android.view.View.VISIBLE);
@@ -139,7 +144,6 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
     public void showToastMessage(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
-
 
     FollowersAdapter.FollowerItemClickListener followerItemClickListener = follower -> {
         followersPresenter.openFollowerDetails(follower);

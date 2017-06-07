@@ -13,6 +13,6 @@ public interface MyTwitterCustomService {
     @GET("/1.1/users/show.json")
     Call<User> show(@Query("user_id") long id);
 
-    @GET("/1.1/followers/list.json")
-    Call<FollowersResponse> followers(@Query("user_id") long id);
+    @GET("/1.1/followers/list.json?count=25")
+    Call<FollowersResponse> followers(@Query("user_id") long id, @Query("cursor") long cursor);
 }
