@@ -1,5 +1,7 @@
 package com.ahmednts.eventtusassignment.utils;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
 import android.view.View;
 import android.widget.TextView;
 
@@ -19,5 +21,14 @@ public class Utils {
                 textView.setText(text);
         } else
             textView.setText("");
+    }
+
+    public static boolean isOnline(Context context) {
+        boolean connected;
+        ConnectivityManager conectivtyManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        connected = conectivtyManager.getActiveNetworkInfo() != null
+                && conectivtyManager.getActiveNetworkInfo().isAvailable()
+                && conectivtyManager.getActiveNetworkInfo().isConnected();
+        return connected;
     }
 }

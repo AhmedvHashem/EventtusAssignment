@@ -1,6 +1,7 @@
 package com.ahmednts.eventtusassignment.followers;
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -16,15 +17,12 @@ import com.ahmednts.eventtusassignment.R;
 import com.ahmednts.eventtusassignment.data.MyTwitterApiClient;
 import com.ahmednts.eventtusassignment.utils.EndlessRecyclerViewScrollListener;
 import com.ahmednts.eventtusassignment.utils.UIUtils;
-import com.facebook.stetho.okhttp3.StethoInterceptor;
 import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.models.User;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import okhttp3.OkHttpClient;
 
 public class FollowersActivity extends AppCompatActivity implements FollowersContract.View {
     private static final String TAG = FollowersActivity.class.getSimpleName();
@@ -52,9 +50,7 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
 
         TwitterSession session = TwitterCore.getInstance().getSessionManager().getActiveSession();
         if (session != null) {
-            OkHttpClient okHttpClient = new OkHttpClient.Builder().addNetworkInterceptor(new StethoInterceptor()).build();
-
-            MyTwitterApiClient myTwitterApiClient = new MyTwitterApiClient(session, okHttpClient);
+            MyTwitterApiClient myTwitterApiClient = new MyTwitterApiClient(getApplicationContext(), session);
             TwitterCore.getInstance().addApiClient(session, myTwitterApiClient);
 
             followersPresenter = new FollowersPresenter(myTwitterApiClient, this);
@@ -143,6 +139,11 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
     @Override
     public void showToastMessage(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showNoNetworkMessage() {
+        Snackbar.make(findViewById(android.R.id.content), "No network connection!", Snackbar.LENGTH_LONG).show();
     }
 
     FollowersAdapter.FollowerItemClickListener followerItemClickListener = follower -> {

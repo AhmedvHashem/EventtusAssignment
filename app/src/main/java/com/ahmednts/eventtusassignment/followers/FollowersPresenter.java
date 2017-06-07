@@ -9,6 +9,7 @@ import com.twitter.sdk.android.core.TwitterApiException;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.models.User;
 
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +24,6 @@ public class FollowersPresenter implements FollowersContract.Presenter {
 
     private FollowersContract.View followersView;
 
-    private boolean firstLoad = true;
     private long nextCursor = -1;
     private List<User> followers;
 
@@ -44,8 +44,10 @@ public class FollowersPresenter implements FollowersContract.Presenter {
             followers.clear();
         }
 
-        if (nextCursor == 0)
+        if (nextCursor == 0) {
+            followersView.hideIndicator();
             return;
+        }
 
         Logger.getInstance().withTag(TAG).log("loadFollowersList: nextCursor=" + nextCursor);
         apiClient.getTwitterCustomService().followers(userId, nextCursor).enqueue(new Callback<FollowersResponse>() {
@@ -69,10 +71,12 @@ public class FollowersPresenter implements FollowersContract.Presenter {
             @Override
             public void failure(TwitterException exception) {
                 exception.printStackTrace();
-
+                followersView.hideIndicator();
                 if (exception instanceof TwitterApiException) {
                     TwitterApiException apiException = (TwitterApiException) exception;
                     followersView.showToastMessage(apiException.getErrorMessage());
+                }else if(exception.getCause() instanceof UnknownHostException){
+                    followersView.showNoNetworkMessage();
                 }
             }
         });

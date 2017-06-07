@@ -21,6 +21,8 @@ interface FollowersContract {
         void showErrorMessage(String msg);
 
         void showToastMessage(String msg);
+
+        void showNoNetworkMessage();
     }
 
     interface Presenter {
