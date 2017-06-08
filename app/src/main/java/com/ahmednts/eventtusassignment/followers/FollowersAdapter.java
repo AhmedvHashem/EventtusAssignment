@@ -14,6 +14,9 @@ import com.twitter.sdk.android.core.models.User;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by AhmedNTS on 6/2/2017.
  */
@@ -54,19 +57,22 @@ public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.Popu
 
     static class PopularMovieViewHolder extends RecyclerView.ViewHolder {
 
+        @BindView(R.id.profileImage)
         ImageView profileImage;
-        TextView profileFullName, profileHandle, profileBio;
+        @BindView(R.id.profileFullName)
+        TextView profileFullName;
+        @BindView(R.id.profileHandle)
+        TextView profileHandle;
+        @BindView(R.id.profileBio)
+        TextView profileBio;
 
         private FollowerItemClickListener followerItemClickListener;
 
         PopularMovieViewHolder(android.view.View itemView, FollowerItemClickListener followerItemClickListener) {
             super(itemView);
-            this.followerItemClickListener = followerItemClickListener;
+            ButterKnife.bind(this, itemView);
 
-            profileImage = (ImageView) itemView.findViewById(R.id.profileImage);
-            profileFullName = (TextView) itemView.findViewById(R.id.profileFullName);
-            profileHandle = (TextView) itemView.findViewById(R.id.profileHandle);
-            profileBio = (TextView) itemView.findViewById(R.id.profileBio);
+            this.followerItemClickListener = followerItemClickListener;
         }
 
         void onBindView(FollowersAdapter adapter, int position) {

@@ -24,16 +24,24 @@ import com.twitter.sdk.android.core.models.User;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class FollowersActivity extends AppCompatActivity implements FollowersContract.View {
     private static final String TAG = FollowersActivity.class.getSimpleName();
 
     private FollowersContract.Presenter followersPresenter;
 
-    private TextView toolbarTitle;
-    private TextView errorMessage;
-    private ProgressBar progressBar;
-    private RecyclerView recyclerView;
-    private SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.toolbar_title)
+    TextView toolbarTitle;
+    @BindView(R.id.errorMessage)
+    TextView errorMessage;
+    @BindView(R.id.progressBar)
+    ProgressBar progressBar;
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
+    @BindView(R.id.swipeRefreshLayout)
+    SwipeRefreshLayout swipeRefreshLayout;
 
     private FollowersAdapter rcAdapter;
 
@@ -42,6 +50,7 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_followers);
+        ButterKnife.bind(this);
 
         initUI();
 
@@ -71,15 +80,8 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
             actionBar.setTitle("");
         }
 
-        toolbarTitle = (TextView) findViewById(R.id.toolbar_title);
-        errorMessage = (TextView) findViewById(R.id.errorMessage);
-
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
         UIUtils.setProgressBarColor(this, progressBar, R.color.colorAccent);
 
-        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
-
-        recyclerView = (RecyclerView) findViewById(R.id.popularMoviesRecyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setHasFixedSize(false);
         recyclerView.setLayoutManager(layoutManager);
