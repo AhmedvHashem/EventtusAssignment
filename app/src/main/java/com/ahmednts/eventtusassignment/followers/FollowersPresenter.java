@@ -1,12 +1,15 @@
 package com.ahmednts.eventtusassignment.followers;
 
-import com.ahmednts.eventtusassignment.data.responses.FollowersResponse;
+import android.support.annotation.NonNull;
+
 import com.ahmednts.eventtusassignment.data.MyTwitterApiClient;
+import com.ahmednts.eventtusassignment.data.responses.FollowersResponse;
 import com.ahmednts.eventtusassignment.utils.Logger;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterApiException;
 import com.twitter.sdk.android.core.TwitterException;
+import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.models.User;
 
 import java.net.UnknownHostException;
@@ -20,26 +23,33 @@ import retrofit2.Call;
  */
 
 public class FollowersPresenter implements FollowersContract.Presenter {
-    public static final String TAG = FollowersPresenter.class.getSimpleName();
+    private static final String TAG = FollowersPresenter.class.getSimpleName();
 
-    private MyTwitterApiClient apiClient;
+    @NonNull
+    private final MyTwitterApiClient apiClient;
 
-    private FollowersContract.View followersView;
+    @NonNull
+    private final FollowersContract.View followersView;
+
+    private final TwitterSession activeSession;
 
     private Call<FollowersResponse> followersResponseCall;
     private long nextCursor = -1;
     private List<User> followers;
 
-    public FollowersPresenter(MyTwitterApiClient apiClient, FollowersContract.View followersView) {
+    public FollowersPresenter(@NonNull TwitterSession activeSession, @NonNull MyTwitterApiClient apiClient, @NonNull FollowersContract.View followersView) {
+        this.activeSession = activeSession;
         this.apiClient = apiClient;
         this.followersView = followersView;
 
         followers = new ArrayList<>(0);
+
+        this.followersView.setTitle(activeSession.getUserName());
     }
 
     @Override
-    public void loadFollowersList(long userId, boolean reload) {
-        Logger.getInstance().withTag(TAG).log("loadFollowersList: userId=" + userId);
+    public void loadFollowersList(boolean reload) {
+        Logger.getInstance().withTag(TAG).log("loadFollowersList: userId=" + activeSession.getUserId());
 
         if (reload) {
             nextCursor = -1;
@@ -54,7 +64,7 @@ public class FollowersPresenter implements FollowersContract.Presenter {
 
         Logger.getInstance().withTag(TAG).log("loadFollowersList: nextCursor=" + nextCursor);
 
-        followersResponseCall = apiClient.getTwitterCustomService().followers(userId, nextCursor);
+        followersResponseCall = apiClient.getTwitterCustomService().followers(activeSession.getUserId(), nextCursor);
         followersResponseCall.enqueue(new Callback<FollowersResponse>() {
             @Override
             public void success(Result<FollowersResponse> result) {
@@ -66,9 +76,10 @@ public class FollowersPresenter implements FollowersContract.Presenter {
                         followers.addAll(result.data.users);
 
                         followersView.hideIndicator();
-                        followersView.showFollowers(followers);
+                        followersView.showFollowersList(followers);
                     } else if (followers.size() == 0) {
-                        followersView.showErrorMessage("You have no followers! Yet");
+                        followersView.hideIndicator();
+                        followersView.showNoResultMessage();
                     }
                 }
             }
@@ -76,11 +87,17 @@ public class FollowersPresenter implements FollowersContract.Presenter {
             @Override
             public void failure(TwitterException exception) {
                 exception.printStackTrace();
+                if (followersResponseCall.isCanceled()) return;
+
                 followersView.hideIndicator();
+
                 if (exception instanceof TwitterApiException) {
                     TwitterApiException apiException = (TwitterApiException) exception;
-                    followersView.showToastMessage(apiException.getErrorMessage());
-                }else if(exception.getCause() instanceof UnknownHostException){
+                    if (apiException.getErrorCode() == 429)
+                        followersView.showApiLimitMessage();
+                    else
+                        followersView.showToastMessage(apiException.getErrorMessage());
+                } else if (exception.getCause() instanceof UnknownHostException) {
                     followersView.showNoNetworkMessage();
                 }
             }
@@ -89,7 +106,7 @@ public class FollowersPresenter implements FollowersContract.Presenter {
 
     @Override
     public void openFollowerDetails(User follower) {
-        followersView.openFollowerDetailsUI();
+        followersView.openFollowerDetailsUI(follower);
     }
 
     @Override

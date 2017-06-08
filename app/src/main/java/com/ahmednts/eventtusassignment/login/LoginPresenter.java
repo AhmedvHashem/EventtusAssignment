@@ -2,29 +2,34 @@ package com.ahmednts.eventtusassignment.login;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.util.Log;
+import android.support.annotation.NonNull;
 
 import com.ahmednts.eventtusassignment.utils.Logger;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.TwitterAuthException;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.identity.TwitterAuthClient;
+
+import java.net.UnknownHostException;
 
 /**
  * Created by AhmedNTS on 6/6/2017.
  */
 
 public class LoginPresenter implements LoginContract.Presenter {
-    public static final String TAG = LoginPresenter.class.getSimpleName();
+    private static final String TAG = LoginPresenter.class.getSimpleName();
 
     private Activity activity;
 
-    private TwitterAuthClient authClient;
+    @NonNull
+    private final TwitterAuthClient authClient;
 
-    private LoginContract.View loginView;
+    @NonNull
+    private final LoginContract.View loginView;
 
-    public LoginPresenter(Activity activity, TwitterAuthClient authClient, LoginContract.View loginView) {
+    public LoginPresenter(Activity activity, @NonNull TwitterAuthClient authClient, @NonNull LoginContract.View loginView) {
         this.activity = activity;
         this.authClient = authClient;
         this.loginView = loginView;
@@ -42,13 +47,21 @@ public class LoginPresenter implements LoginContract.Presenter {
             @Override
             public void failure(TwitterException exception) {
                 Logger.getInstance().withTag(TAG).log("failure: " + exception.getMessage());
+
+                if (exception.getCause() instanceof UnknownHostException) {
+                    loginView.showNoNetworkMessage();
+                }
             }
         });
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data){
-        authClient.onActivityResult(requestCode, resultCode, data);
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        try {
+            authClient.onActivityResult(requestCode, resultCode, data);
+        } catch (TwitterAuthException twitterAuthException) {
+            loginView.showAuthorizeFailedMessage();
+        }
     }
 
     @Override

@@ -9,6 +9,10 @@ interface LoginContract {
 
     interface View {
         void showFollowers(long userId);
+
+        void showNoNetworkMessage();
+
+        void showAuthorizeFailedMessage();
     }
 
     interface Presenter {

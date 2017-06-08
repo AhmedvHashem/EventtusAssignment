@@ -14,7 +14,7 @@ import com.twitter.sdk.android.core.TwitterConfig;
  */
 public class App extends Application {
 
-    private static  App instance;
+    private static App instance;
 
     @Override
     public void onCreate() {

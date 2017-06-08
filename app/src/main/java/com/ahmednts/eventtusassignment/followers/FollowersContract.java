@@ -10,15 +10,19 @@ import java.util.List;
 interface FollowersContract {
 
     interface View {
-        void showFollowers(List<User> users);
+        void setTitle(String username);
 
-        void openFollowerDetailsUI();
+        void showFollowersList(List<User> users);
+
+        void openFollowerDetailsUI(User follower);
 
         void showIndicator();
 
         void hideIndicator();
 
-        void showErrorMessage(String msg);
+        void showNoResultMessage();
+
+        void showApiLimitMessage();
 
         void showToastMessage(String msg);
 
@@ -26,7 +30,7 @@ interface FollowersContract {
     }
 
     interface Presenter {
-        void loadFollowersList(long userId, boolean reload);
+        void loadFollowersList(boolean reload);
 
         void openFollowerDetails(User follower);
 

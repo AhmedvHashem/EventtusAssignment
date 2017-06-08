@@ -27,16 +27,15 @@ import java.util.List;
 public class FollowersActivity extends AppCompatActivity implements FollowersContract.View {
     private static final String TAG = FollowersActivity.class.getSimpleName();
 
+    private FollowersContract.Presenter followersPresenter;
+
     private TextView toolbarTitle;
     private TextView errorMessage;
     private ProgressBar progressBar;
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
 
-    private FollowersContract.Presenter followersPresenter;
-
-    FollowersAdapter rcAdapter;
-    TwitterSession session;
+    private FollowersAdapter rcAdapter;
 
     boolean isLoading;
 
@@ -46,13 +45,13 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
 
         initUI();
 
-        session = TwitterCore.getInstance().getSessionManager().getActiveSession();
-        if (session != null) {
-            MyTwitterApiClient myTwitterApiClient = new MyTwitterApiClient(getApplicationContext(), session);
-            TwitterCore.getInstance().addApiClient(session, myTwitterApiClient);
+        TwitterSession activeSession = TwitterCore.getInstance().getSessionManager().getActiveSession();
+        if (activeSession != null) {
+            MyTwitterApiClient myTwitterApiClient = new MyTwitterApiClient(getApplicationContext(), activeSession);
+            TwitterCore.getInstance().addApiClient(activeSession, myTwitterApiClient);
 
-            followersPresenter = new FollowersPresenter(myTwitterApiClient, this);
-            followersPresenter.loadFollowersList(session.getUserId(), true);
+            followersPresenter = new FollowersPresenter(activeSession, myTwitterApiClient, this);
+            followersPresenter.loadFollowersList(true);
         }
     }
 
@@ -74,9 +73,12 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
 
         toolbarTitle = (TextView) findViewById(R.id.toolbar_title);
         errorMessage = (TextView) findViewById(R.id.errorMessage);
+
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         UIUtils.setProgressBarColor(this, progressBar, R.color.colorAccent);
+
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+
         recyclerView = (RecyclerView) findViewById(R.id.popularMoviesRecyclerView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setHasFixedSize(false);
@@ -84,17 +86,15 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
         rcAdapter = new FollowersAdapter(new ArrayList<>(0), followerItemClickListener);
         recyclerView.setAdapter(rcAdapter);
 
-        swipeRefreshLayout.setOnRefreshListener(() -> {
-                    followersPresenter.loadFollowersList(session.getUserId(), true);
-                }
-        );
+        swipeRefreshLayout.setOnRefreshListener(() -> followersPresenter.loadFollowersList(true));
 
         recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager, 0) {
             @Override
             public void onLoadMore(final int page, int totalItemsCount) {
                 Log.w(TAG, "onLoadMore= " + page);
+
                 isLoading = true;
-                followersPresenter.loadFollowersList(session.getUserId(), false);
+                followersPresenter.loadFollowersList(false);
             }
 
             @Override
@@ -105,20 +105,24 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
     }
 
     @Override
-    public void showFollowers(List<User> users) {
-        toolbarTitle.setText("@" + session.getUserName() + "'s Followers");
+    public void setTitle(String  username) {
+        toolbarTitle.setText("@" + username + "'s Followers");
+    }
 
+    @Override
+    public void showFollowersList(List<User> users) {
         rcAdapter.replaceData(users);
         rcAdapter.notifyDataSetChanged();
     }
 
     @Override
-    public void openFollowerDetailsUI() {
+    public void openFollowerDetailsUI(User follower) {
 
     }
 
     @Override
     public void showIndicator() {
+        isLoading = true;
         recyclerView.setVisibility(android.view.View.GONE);
         errorMessage.setVisibility(android.view.View.GONE);
         progressBar.setVisibility(android.view.View.VISIBLE);
@@ -134,12 +138,13 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
     }
 
     @Override
-    public void showErrorMessage(String msg) {
-        isLoading = false;
-        progressBar.setVisibility(android.view.View.GONE);
-        recyclerView.setVisibility(android.view.View.GONE);
-        errorMessage.setVisibility(android.view.View.VISIBLE);
-        errorMessage.setText(msg);
+    public void showNoResultMessage() {
+        errorMessage.setText(getString(R.string.msg_no_followers));
+    }
+
+    @Override
+    public void showApiLimitMessage() {
+        Toast.makeText(this, getString(R.string.msg_api_limit_exceeded), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -149,10 +154,9 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
 
     @Override
     public void showNoNetworkMessage() {
-        Snackbar.make(findViewById(android.R.id.content), "No network connection!", Snackbar.LENGTH_LONG).show();
+        Snackbar.make(findViewById(android.R.id.content),  getString(R.string.error_network), Snackbar.LENGTH_LONG).show();
     }
 
-    FollowersAdapter.FollowerItemClickListener followerItemClickListener = follower -> {
-        followersPresenter.openFollowerDetails(follower);
-    };
+    FollowersAdapter.FollowerItemClickListener followerItemClickListener = follower ->
+            followersPresenter.openFollowerDetails(follower);
 }

@@ -2,8 +2,10 @@ package com.ahmednts.eventtusassignment.login;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.ahmednts.eventtusassignment.R;
 import com.ahmednts.eventtusassignment.followers.FollowersActivity;
@@ -11,11 +13,11 @@ import com.ahmednts.eventtusassignment.utils.Logger;
 import com.twitter.sdk.android.core.identity.TwitterAuthClient;
 
 public class LoginActivity extends AppCompatActivity implements LoginContract.View {
-    public static final String TAG = LoginActivity.class.getSimpleName();
+    private static final String TAG = LoginActivity.class.getSimpleName();
 
-    Button loginButton;
+    private Button loginButton;
 
-    LoginContract.Presenter loginPresenter;
+    private LoginContract.Presenter loginPresenter;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,9 +29,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
         loginPresenter = new LoginPresenter(this, authClient, this);
 
-        loginButton.setOnClickListener(v -> {
-            loginPresenter.authenticate();
-        });
+        loginButton.setOnClickListener(v -> loginPresenter.authenticate());
     }
 
     @Override
@@ -59,5 +59,15 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         Intent intent = new Intent(this, FollowersActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public void showNoNetworkMessage() {
+        Snackbar.make(findViewById(android.R.id.content), getString(R.string.error_network), Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void showAuthorizeFailedMessage() {
+        Toast.makeText(this, getString(R.string.error_authorization), Toast.LENGTH_SHORT).show();
     }
 }

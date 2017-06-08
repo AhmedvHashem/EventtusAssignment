@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">EventtusAssignment</string>
+
+    <string name="error_network">No network connection!</string>
+    <string name="error_authorization">Authorization failed! make sure your account is unlocked</string>
+
+    <string name="msg_no_followers">You have no followers! Yet</string>
+    <string name="msg_api_limit_exceeded">Too many requests, your API limit exceeded!</string>
+
 </resources>
