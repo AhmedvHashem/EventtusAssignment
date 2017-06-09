@@ -44,7 +44,7 @@ public class FollowerDetailsActivity extends AppCompatActivity implements Follow
     RecyclerView recyclerView;
 
     public static void open(Context context, Parcelable followerInfo) {
-        Intent intent = new Intent(context, FollowersActivity.class);
+        Intent intent = new Intent(context, FollowerDetailsActivity.class);
         intent.putExtra(EXTRA_FOLLOWER, followerInfo);
         context.startActivity(intent);
     }

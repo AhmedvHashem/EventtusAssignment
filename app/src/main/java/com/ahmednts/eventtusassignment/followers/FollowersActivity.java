@@ -126,7 +126,6 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
     public void openFollowerDetailsUI(User follower) {
         Parcelable followerInfo = Parcels.wrap(new FollowerInfo(follower.id, follower.name, follower.screenName, follower.profileImageUrl, follower.profileBackgroundImageUrl));
         FollowerDetailsActivity.open(this, followerInfo);
-        finish();
     }
 
     @Override
