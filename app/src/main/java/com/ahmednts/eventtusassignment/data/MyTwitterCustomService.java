@@ -1,6 +1,6 @@
 package com.ahmednts.eventtusassignment.data;
 
-import com.ahmednts.eventtusassignment.data.responses.FollowersResponse;
+import com.ahmednts.eventtusassignment.data.followers.FollowersResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

@@ -3,7 +3,7 @@ package com.ahmednts.eventtusassignment.followers;
 import android.support.annotation.NonNull;
 
 import com.ahmednts.eventtusassignment.data.MyTwitterApiClient;
-import com.ahmednts.eventtusassignment.data.responses.FollowersResponse;
+import com.ahmednts.eventtusassignment.data.followers.FollowersResponse;
 import com.ahmednts.eventtusassignment.utils.Logger;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
