@@ -1,15 +1,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@+id/tweetContainer"
-    xmlns:twittersdk="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    card_view:cardCornerRadius="5dp"
-    card_view:cardUseCompatPadding="true">
+    android:layout_height="wrap_content">
 
-    <!--<com.twitter.sdk.android.tweetui.TweetView-->
-        <!--android:id="@+id/tweetView"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-       <!--/>-->
+
 </FrameLayout>

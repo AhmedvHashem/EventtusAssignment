@@ -1,8 +1,11 @@
 package com.ahmednts.eventtusassignment;
 
 import android.app.Application;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.ahmednts.eventtusassignment.utils.AppLocal;
 import com.facebook.stetho.Stetho;
 import com.squareup.leakcanary.LeakCanary;
 import com.twitter.sdk.android.core.DefaultLogger;
@@ -16,6 +19,10 @@ import com.twitter.sdk.android.core.TwitterConfig;
 public class App extends Application {
 
     private static App instance;
+
+    public static App getInstance() {
+        return instance;
+    }
 
     @Override
     public void onCreate() {
@@ -31,6 +38,8 @@ public class App extends Application {
 
         instance = this;
 
+        AppLocal.setAppLocal(getApplicationContext(), AppLocal.getAppLocal());
+
         TwitterConfig config = new TwitterConfig.Builder(this)
                 .logger(new DefaultLogger(Log.DEBUG))
                 .twitterAuthConfig(new TwitterAuthConfig(getString(R.string.com_twitter_sdk_android_CONSUMER_KEY)
@@ -41,7 +50,7 @@ public class App extends Application {
         Twitter.initialize(config);
     }
 
-    public static App getInstance() {
-        return instance;
+    public SharedPreferences getDefaultSharedPreferences() {
+        return PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
     }
 }

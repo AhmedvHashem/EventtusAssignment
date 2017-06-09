@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error_network">لا يوجد أتصال بالشبكة!</string>
+    <string name="error_authorization">تم رفض السماح بالدخول</string>
+
+    <string name="msg_no_followers">لا يوجد لديك متابعين</string>
+    <string name="msg_no_tweets">لا يوجد تغريدات!</string>
+
+    <string name="acc_add">أضف حساب</string>
+
+</resources>

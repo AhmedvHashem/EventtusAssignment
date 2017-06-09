@@ -35,3 +35,7 @@
 -keep interface org.parceler.Parcel
 -keep @org.parceler.Parcel class * { *; }
 -keep class **$$Parcelable { *; }
+
+# RetroLambdas
+-dontwarn java.lang.invoke.*
+-dontwarn **$$Lambda$*

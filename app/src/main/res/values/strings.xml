@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">EventtusAssignment</string>
 
@@ -8,6 +9,9 @@
     <string name="msg_api_limit_exceeded">Too many requests, your API limit exceeded!</string>
     <string name="msg_no_tweets">There are no tweets!</string>
 
+    <string name="lang_english">English</string>
+    <string name="lang_arabic">عربى</string>
 
+    <string name="acc_add">Add Account</string>
 
 </resources>

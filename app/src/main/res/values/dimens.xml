@@ -2,4 +2,6 @@
     <dimen name="app_bar_height">200dp</dimen>
     <dimen name="padding_10">10dp</dimen>
 
+    <dimen name="popup_width">400dp</dimen>
+
 </resources>

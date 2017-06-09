@@ -1,5 +1,8 @@
 package com.ahmednts.eventtusassignment.followers;
 
+import android.support.annotation.NonNull;
+
+import com.ahmednts.eventtusassignment.data.MyTwitterApiClient;
 import com.twitter.sdk.android.core.models.User;
 
 import java.util.List;
@@ -30,6 +33,8 @@ interface FollowersContract {
     }
 
     interface Presenter {
+
+        void setNewApiClient(@NonNull MyTwitterApiClient apiClient);
         void loadFollowersList(boolean reload);
 
         void openFollowerDetails(User follower);

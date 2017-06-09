@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.ahmednts.eventtusassignment.R;
 import com.ahmednts.eventtusassignment.data.MyTwitterApiClient;
 import com.ahmednts.eventtusassignment.data.followers.FollowerInfo;
+import com.ahmednts.eventtusassignment.utils.AppLocal;
 import com.ahmednts.eventtusassignment.utils.CircleTransform;
 import com.ahmednts.eventtusassignment.utils.UIUtils;
 import com.ahmednts.eventtusassignment.utils.Utils;
@@ -67,6 +68,8 @@ public class FollowerDetailsActivity extends AppCompatActivity implements Follow
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AppLocal.setAppLocal(getApplicationContext(), AppLocal.getAppLocal());
+
         setContentView(R.layout.activity_follower_details);
         ButterKnife.bind(this);
 

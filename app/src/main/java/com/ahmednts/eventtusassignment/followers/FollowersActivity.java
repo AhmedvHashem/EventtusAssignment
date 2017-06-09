@@ -1,15 +1,18 @@
 package com.ahmednts.eventtusassignment.followers;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -19,7 +22,10 @@ import com.ahmednts.eventtusassignment.R;
 import com.ahmednts.eventtusassignment.data.MyTwitterApiClient;
 import com.ahmednts.eventtusassignment.data.followers.FollowerInfo;
 import com.ahmednts.eventtusassignment.followerdetails.FollowerDetailsActivity;
+import com.ahmednts.eventtusassignment.login.LoginActivity;
+import com.ahmednts.eventtusassignment.utils.AppLocal;
 import com.ahmednts.eventtusassignment.utils.EndlessRecyclerViewScrollListener;
+import com.ahmednts.eventtusassignment.utils.Logger;
 import com.ahmednts.eventtusassignment.utils.UIUtils;
 import com.ahmednts.eventtusassignment.utils.Utils;
 import com.twitter.sdk.android.core.TwitterCore;
@@ -30,11 +36,13 @@ import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
-public class FollowersActivity extends AppCompatActivity implements FollowersContract.View {
+public class FollowersActivity extends AppCompatActivity implements FollowersContract.View, PopupMenu.OnMenuItemClickListener {
     private static final String TAG = FollowersActivity.class.getSimpleName();
 
     private FollowersContract.Presenter followersPresenter;
@@ -50,25 +58,30 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
 
+    @BindView(R.id.switchLang)
+    View switchLang;
+    @BindView(R.id.switchAccounts)
+    View switchAccounts;
+
+    PopupMenu popupAccounts, popupLang;
+
     private FollowersAdapter rcAdapter;
 
     boolean isLoading;
 
+    Map<Long, TwitterSession> sessions = TwitterCore.getInstance().getSessionManager().getSessionMap();
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AppLocal.setAppLocal(getApplicationContext(), AppLocal.getAppLocal());
+
         setContentView(R.layout.activity_followers);
         ButterKnife.bind(this);
 
         initUI();
 
-        TwitterSession activeSession = TwitterCore.getInstance().getSessionManager().getActiveSession();
-        if (activeSession != null) {
-            MyTwitterApiClient myTwitterApiClient = new MyTwitterApiClient(getApplicationContext(), activeSession);
-            TwitterCore.getInstance().addApiClient(activeSession, myTwitterApiClient);
-
-            followersPresenter = new FollowersPresenter(activeSession, myTwitterApiClient, this);
-            followersPresenter.loadFollowersList(true);
-        }
+        followersPresenter = new FollowersPresenter(getCurrentApiClient(TwitterCore.getInstance().getSessionManager().getActiveSession()), this);
+        followersPresenter.loadFollowersList(true);
     }
 
     @Override
@@ -79,13 +92,11 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
     }
 
     void initUI() {
+        registerForContextMenu(recyclerView);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setTitle("");
-        }
+        getSupportActionBar().setTitle("");
 
         UIUtils.setProgressBarColor(this, progressBar, R.color.colorAccent);
 
@@ -111,6 +122,65 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
                 return isLoading;
             }
         });
+    }
+
+    @OnClick(R.id.switchLang)
+    void onSwitchLang() {
+        popupLang = new PopupMenu(this, switchLang, Gravity.END);
+        popupLang.getMenu().add("English");
+        popupLang.getMenu().add("Arabic");
+        popupLang.setOnMenuItemClickListener(this);
+        popupLang.show();
+    }
+
+    @OnClick(R.id.switchAccounts)
+    void onSwitchAccounts() {
+        popupAccounts = new PopupMenu(this, switchAccounts, Gravity.START);
+        popupAccounts.getMenu().add("Add Account");
+        for (TwitterSession s : sessions.values()) {
+            Logger.getInstance().withTag(TAG).log("getSessionMap: " + s);
+            popupAccounts.getMenu().add(Utils.getUsernameScreenDisplay(s.getUserName()));
+        }
+        popupAccounts.setOnMenuItemClickListener(this);
+        popupAccounts.show();
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+
+        if (item.getTitle().equals("English") && !AppLocal.getAppLocal().equals(AppLocal.PREF_LOCAL_ENGLISH)) {
+            AppLocal.setAppLocal(this, AppLocal.PREF_LOCAL_ENGLISH);
+            recreate();
+            return true;
+        } else if (item.getTitle().equals("Arabic") && !AppLocal.getAppLocal().equals(AppLocal.PREF_LOCAL_ARABIC)) {
+            AppLocal.setAppLocal(this, AppLocal.PREF_LOCAL_ARABIC);
+            recreate();
+            return true;
+        } else if (item.getTitle().equals("Add Account")) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        } else {
+
+            for (TwitterSession s : sessions.values()) {
+                if (item.getTitle().equals(Utils.getUsernameScreenDisplay(s.getUserName()))) {
+                    Logger.getInstance().withTag(TAG).log("setActiveSession: " + s);
+                    TwitterCore.getInstance().getSessionManager().setActiveSession(s);
+                    break;
+                }
+            }
+
+            followersPresenter.setNewApiClient(getCurrentApiClient(TwitterCore.getInstance().getSessionManager().getActiveSession()));
+            followersPresenter.loadFollowersList(true);
+        }
+
+        return false;
+    }
+
+    MyTwitterApiClient getCurrentApiClient(TwitterSession activeSession) {
+        MyTwitterApiClient myTwitterApiClient = new MyTwitterApiClient(getApplicationContext(), activeSession);
+        TwitterCore.getInstance().addApiClient(activeSession, myTwitterApiClient);
+        return myTwitterApiClient;
     }
 
     @Override
@@ -170,4 +240,6 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
 
     FollowersAdapter.FollowerItemClickListener followerItemClickListener = follower ->
             followersPresenter.openFollowerDetails(follower);
+
+
 }

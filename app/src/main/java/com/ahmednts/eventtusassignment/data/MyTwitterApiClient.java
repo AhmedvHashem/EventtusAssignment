@@ -20,8 +20,12 @@ import okhttp3.Response;
 
 public class MyTwitterApiClient extends TwitterApiClient {
 
+    private TwitterSession session;
+
     public MyTwitterApiClient(Context context, TwitterSession session) {
         super(session, MyTwitterApiClient.createCachedClient(context));
+
+        this.session = session;
     }
 
     /**
@@ -29,6 +33,10 @@ public class MyTwitterApiClient extends TwitterApiClient {
      */
     public MyTwitterCustomService getTwitterCustomService() {
         return getService(MyTwitterCustomService.class);
+    }
+
+    public TwitterSession getSession() {
+        return session;
     }
 
     private static OkHttpClient createCachedClient(final Context context) {
