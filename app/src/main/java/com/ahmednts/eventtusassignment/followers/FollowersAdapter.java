@@ -20,7 +20,7 @@ import butterknife.ButterKnife;
 /**
  * Created by AhmedNTS on 6/2/2017.
  */
-public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.PopularMovieViewHolder> {
+public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.FollowerViewHolder> {
 
     private List<User> itemList;
     private FollowerItemClickListener followerItemClickListener;
@@ -31,13 +31,13 @@ public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.Popu
     }
 
     @Override
-    public PopularMovieViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public FollowerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         android.view.View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_follower, parent, false);
-        return new PopularMovieViewHolder(layoutView, followerItemClickListener);
+        return new FollowerViewHolder(layoutView, followerItemClickListener);
     }
 
     @Override
-    public void onBindViewHolder(PopularMovieViewHolder holder, int position) {
+    public void onBindViewHolder(FollowerViewHolder holder, int position) {
         holder.onBindView(this, position);
     }
 
@@ -55,7 +55,7 @@ public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.Popu
         itemList = users;
     }
 
-    static class PopularMovieViewHolder extends RecyclerView.ViewHolder {
+    static class FollowerViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.profileImage)
         ImageView profileImage;
@@ -68,7 +68,7 @@ public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.Popu
 
         private FollowerItemClickListener followerItemClickListener;
 
-        PopularMovieViewHolder(android.view.View itemView, FollowerItemClickListener followerItemClickListener) {
+        FollowerViewHolder(android.view.View itemView, FollowerItemClickListener followerItemClickListener) {
             super(itemView);
             ButterKnife.bind(this, itemView);
 
@@ -80,7 +80,7 @@ public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.Popu
 
             Picasso.with(itemView.getContext())
                     .load(follower.profileImageUrlHttps)
-                    .placeholder(R.drawable.tw__ic_logo_default)
+                    .placeholder(R.drawable.ic_profile_default)
                     .transform(new CircleTransform())
                     .fit().centerCrop().into(profileImage);
 

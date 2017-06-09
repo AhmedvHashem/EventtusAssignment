@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +21,7 @@ import com.ahmednts.eventtusassignment.data.followers.FollowerInfo;
 import com.ahmednts.eventtusassignment.followerdetails.FollowerDetailsActivity;
 import com.ahmednts.eventtusassignment.utils.EndlessRecyclerViewScrollListener;
 import com.ahmednts.eventtusassignment.utils.UIUtils;
+import com.ahmednts.eventtusassignment.utils.Utils;
 import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.models.User;
@@ -113,7 +115,7 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
 
     @Override
     public void setTitle(String username) {
-        toolbarTitle.setText("@" + username + "'s Followers");
+        toolbarTitle.setText(Utils.getUsernameScreenDisplay(username) + "'s Followers");
     }
 
     @Override
@@ -147,6 +149,7 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
 
     @Override
     public void showNoResultMessage() {
+        errorMessage.setVisibility(View.VISIBLE);
         errorMessage.setText(getString(R.string.msg_no_followers));
     }
 

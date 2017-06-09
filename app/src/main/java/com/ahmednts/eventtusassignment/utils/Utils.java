@@ -23,6 +23,10 @@ public class Utils {
             textView.setText("");
     }
 
+    public static String getUsernameScreenDisplay(String username) {
+        return "@" + username;
+    }
+
     public static boolean isOnline(Context context) {
         boolean connected;
         ConnectivityManager conectivtyManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);

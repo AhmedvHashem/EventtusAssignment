@@ -10,15 +10,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ahmednts.eventtusassignment.R;
 import com.ahmednts.eventtusassignment.data.followers.FollowerInfo;
-import com.ahmednts.eventtusassignment.followers.FollowersActivity;
-import com.ahmednts.eventtusassignment.followers.FollowersAdapter;
+import com.ahmednts.eventtusassignment.utils.CircleTransform;
 import com.ahmednts.eventtusassignment.utils.UIUtils;
+import com.ahmednts.eventtusassignment.utils.Utils;
+import com.squareup.picasso.Picasso;
 import com.twitter.sdk.android.core.models.Tweet;
 
 import org.parceler.Parcels;
@@ -36,12 +39,22 @@ public class FollowerDetailsActivity extends AppCompatActivity implements Follow
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+
+    @BindView(R.id.profileHandle)
+    TextView profileHandle;
+    @BindView(R.id.profileImage)
+    ImageView profileImage;
+    @BindView(R.id.profileBG)
+    ImageView profileBG;
+
     @BindView(R.id.errorMessage)
     TextView errorMessage;
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
+
+    private TweetsAdapter tweetsAdapter;
 
     public static void open(Context context, Parcelable followerInfo) {
         Intent intent = new Intent(context, FollowerDetailsActivity.class);
@@ -76,10 +89,11 @@ public class FollowerDetailsActivity extends AppCompatActivity implements Follow
         UIUtils.setProgressBarColor(this, progressBar, R.color.colorAccent);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setHasFixedSize(false);
         recyclerView.setLayoutManager(layoutManager);
-//        rcAdapter = new FollowersAdapter(new ArrayList<>(0), followerItemClickListener);
-//        recyclerView.setAdapter(rcAdapter);
+        tweetsAdapter = new TweetsAdapter(new ArrayList<>(0));
+        recyclerView.setAdapter(tweetsAdapter);
     }
 
     @Override
@@ -89,16 +103,32 @@ public class FollowerDetailsActivity extends AppCompatActivity implements Follow
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        followerDetailsPresenter.stop();
+    }
+
+    @Override
     public void setFollowerData(FollowerInfo followerInfo) {
         toolbar.setTitle(followerInfo.getName());
+        profileHandle.setText(Utils.getUsernameScreenDisplay(followerInfo.getUsername()));
 
+        Picasso.with(this)
+                .load(followerInfo.getProfileImageUrl())
+                .placeholder(R.drawable.ic_profile_default)
+                .transform(new CircleTransform())
+                .fit().centerCrop().into(profileImage);
 
+        Picasso.with(this)
+                .load(followerInfo.getBackgroundImageUrl())
+                .placeholder(R.drawable.bg_default)
+                .fit().centerCrop().into(profileBG);
     }
 
     @Override
     public void showTweetsList(List<Tweet> tweets) {
-//        rcAdapter.replaceData(tweets);
-//        rcAdapter.notifyDataSetChanged();
+        tweetsAdapter.replaceData(tweets);
+        tweetsAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -117,6 +147,7 @@ public class FollowerDetailsActivity extends AppCompatActivity implements Follow
 
     @Override
     public void showNoResultMessage() {
+        errorMessage.setVisibility(View.VISIBLE);
         errorMessage.setText(getString(R.string.msg_no_tweets));
     }
 
