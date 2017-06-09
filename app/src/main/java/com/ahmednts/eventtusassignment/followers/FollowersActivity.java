@@ -1,6 +1,7 @@
 package com.ahmednts.eventtusassignment.followers;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
@@ -15,11 +16,15 @@ import android.widget.Toast;
 
 import com.ahmednts.eventtusassignment.R;
 import com.ahmednts.eventtusassignment.data.MyTwitterApiClient;
+import com.ahmednts.eventtusassignment.data.followers.FollowerInfo;
+import com.ahmednts.eventtusassignment.followerdetails.FollowerDetailsActivity;
 import com.ahmednts.eventtusassignment.utils.EndlessRecyclerViewScrollListener;
 import com.ahmednts.eventtusassignment.utils.UIUtils;
 import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.models.User;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -107,7 +112,7 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
     }
 
     @Override
-    public void setTitle(String  username) {
+    public void setTitle(String username) {
         toolbarTitle.setText("@" + username + "'s Followers");
     }
 
@@ -119,7 +124,9 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
 
     @Override
     public void openFollowerDetailsUI(User follower) {
-
+        Parcelable followerInfo = Parcels.wrap(new FollowerInfo(follower.id, follower.name, follower.screenName, follower.profileImageUrl, follower.profileBackgroundImageUrl));
+        FollowerDetailsActivity.open(this, followerInfo);
+        finish();
     }
 
     @Override
@@ -156,7 +163,7 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
 
     @Override
     public void showNoNetworkMessage() {
-        Snackbar.make(findViewById(android.R.id.content),  getString(R.string.error_network), Snackbar.LENGTH_LONG).show();
+        Snackbar.make(findViewById(android.R.id.content), getString(R.string.error_network), Snackbar.LENGTH_LONG).show();
     }
 
     FollowersAdapter.FollowerItemClickListener followerItemClickListener = follower ->

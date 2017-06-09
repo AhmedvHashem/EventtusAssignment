@@ -22,12 +22,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".login.LoginActivity" />
         <activity
             android:name=".followers.FollowersActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-
+        <activity
+            android:name=".followerdetails.FollowerDetailsActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>
