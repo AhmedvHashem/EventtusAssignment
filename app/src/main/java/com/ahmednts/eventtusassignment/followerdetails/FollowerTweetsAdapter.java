@@ -16,11 +16,11 @@ import butterknife.ButterKnife;
 /**
  * Created by AhmedNTS on 6/2/2017.
  */
-public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.TweetViewHolder> {
+public class FollowerTweetsAdapter extends RecyclerView.Adapter<FollowerTweetsAdapter.TweetViewHolder> {
 
     private List<Tweet> itemList;
 
-    TweetsAdapter(List<Tweet> itemList) {
+    FollowerTweetsAdapter(List<Tweet> itemList) {
         this.itemList = itemList;
     }
 
@@ -59,7 +59,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.TweetViewH
             ButterKnife.bind(this, itemView);
         }
 
-        void onBindView(TweetsAdapter adapter, int position) {
+        void onBindView(FollowerTweetsAdapter adapter, int position) {
             Tweet tweet = adapter.itemList.get(position);
 
             tweetContainer.addView(new TweetView(itemView.getContext(), tweet));

@@ -17,11 +17,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ahmednts.eventtusassignment.R;
+import com.ahmednts.eventtusassignment.data.MyTwitterApiClient;
 import com.ahmednts.eventtusassignment.data.followers.FollowerInfo;
 import com.ahmednts.eventtusassignment.utils.CircleTransform;
 import com.ahmednts.eventtusassignment.utils.UIUtils;
 import com.ahmednts.eventtusassignment.utils.Utils;
 import com.squareup.picasso.Picasso;
+import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.core.models.Tweet;
 
 import org.parceler.Parcels;
@@ -54,7 +56,7 @@ public class FollowerDetailsActivity extends AppCompatActivity implements Follow
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
 
-    private TweetsAdapter tweetsAdapter;
+    private FollowerTweetsAdapter followerTweetsAdapter;
 
     public static void open(Context context, Parcelable followerInfo) {
         Intent intent = new Intent(context, FollowerDetailsActivity.class);
@@ -72,7 +74,9 @@ public class FollowerDetailsActivity extends AppCompatActivity implements Follow
 
         FollowerInfo followerInfo = Parcels.unwrap(getIntent().getParcelableExtra(EXTRA_FOLLOWER));
 
-        followerDetailsPresenter = new FollowerDetailsPresenter(followerInfo, this);
+        MyTwitterApiClient myTwitterApiClient = (MyTwitterApiClient) TwitterCore.getInstance().getApiClient();
+
+        followerDetailsPresenter = new FollowerDetailsPresenter(followerInfo, myTwitterApiClient, this);
         followerDetailsPresenter.start();
     }
 
@@ -92,8 +96,8 @@ public class FollowerDetailsActivity extends AppCompatActivity implements Follow
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setHasFixedSize(false);
         recyclerView.setLayoutManager(layoutManager);
-        tweetsAdapter = new TweetsAdapter(new ArrayList<>(0));
-        recyclerView.setAdapter(tweetsAdapter);
+        followerTweetsAdapter = new FollowerTweetsAdapter(new ArrayList<>(0));
+        recyclerView.setAdapter(followerTweetsAdapter);
     }
 
     @Override
@@ -127,8 +131,8 @@ public class FollowerDetailsActivity extends AppCompatActivity implements Follow
 
     @Override
     public void showTweetsList(List<Tweet> tweets) {
-        tweetsAdapter.replaceData(tweets);
-        tweetsAdapter.notifyDataSetChanged();
+        followerTweetsAdapter.replaceData(tweets);
+        followerTweetsAdapter.notifyDataSetChanged();
     }
 
     @Override

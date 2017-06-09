@@ -27,12 +27,15 @@ public class FollowerDetailsPresenter implements FollowerDetailsContract.Present
     @NonNull
     private final FollowerDetailsContract.View followerDetailsView;
     @NonNull
+    MyTwitterApiClient myTwitterApiClient;
+    @NonNull
     private final FollowerInfo followerInfo;
 
     private Call<List<Tweet>> followerLast10TweetsCall;
 
-    public FollowerDetailsPresenter(@NonNull FollowerInfo followerInfo, @NonNull FollowerDetailsContract.View followerDetailsView) {
+    public FollowerDetailsPresenter(@NonNull FollowerInfo followerInfo,@NonNull MyTwitterApiClient myTwitterApiClient, @NonNull FollowerDetailsContract.View followerDetailsView) {
         this.followerDetailsView = followerDetailsView;
+        this.myTwitterApiClient = myTwitterApiClient;
         this.followerInfo = followerInfo;
     }
 
@@ -46,9 +49,7 @@ public class FollowerDetailsPresenter implements FollowerDetailsContract.Present
     private void loadLastTweets() {
         followerDetailsView.showIndicator();
 
-        MyTwitterApiClient twitterApiClient = (MyTwitterApiClient) TwitterCore.getInstance().getApiClient();
-        StatusesService statusesService = twitterApiClient.getStatusesService();
-        followerLast10TweetsCall = statusesService.userTimeline(
+        followerLast10TweetsCall = myTwitterApiClient.getStatusesService().userTimeline(
                 followerInfo.getId(), null, 10, null, null, null, true, null, null);
         followerLast10TweetsCall.enqueue(new Callback<List<Tweet>>() {
             @Override
