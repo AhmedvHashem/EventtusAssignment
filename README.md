@@ -13,8 +13,8 @@ a simple twitter client for android using TwitterKit SDK
 3. Localization for Arabic and English.
 
 # Architecture Design Pattern used
-MVP (Model-View-Presenter) from [Google Android Architecture](https://github.com/googlesamples/android-architecture)
-Package by feature not layer refer to [this](https://medium.com/@cesarmcferreira/package-by-features-not-layers-2d076df1964d)
+- MVP (Model-View-Presenter) from [Google Android Architecture](https://github.com/googlesamples/android-architecture)
+- Package by feature not layer refer to [this](https://medium.com/@cesarmcferreira/package-by-features-not-layers-2d076df1964d)
 # Third party library used
 1. [TwitterSDK](https://dev.twitter.com/twitterkit/android/overview)
 2. [Retrofit](http://square.github.io/retrofit/)
