@@ -10,6 +10,7 @@ import com.ahmednts.eventtusassignment.login.LoginActivity;
 import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.core.TwitterSession;
 
+
 public class SplashActivity extends AppCompatActivity {
     public static final String TAG = SplashActivity.class.getSimpleName();
 
