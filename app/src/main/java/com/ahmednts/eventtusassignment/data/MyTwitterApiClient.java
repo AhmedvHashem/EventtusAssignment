@@ -23,6 +23,7 @@ import okhttp3.Response;
 public class MyTwitterApiClient extends TwitterApiClient {
 
     public MyTwitterApiClient(Context context, TwitterSession session) {
+//        super(session);
         super(session, MyTwitterApiClient.createCachedClient(context));
     }
 

@@ -56,6 +56,7 @@ public class FollowersPresenter implements FollowersContract.Presenter {
             nextCursor = -1;
             followersView.showIndicator();
             followers.clear();
+            followers.add(null);
         }
 
         if (nextCursor == 0) {
@@ -74,7 +75,10 @@ public class FollowersPresenter implements FollowersContract.Presenter {
                         nextCursor = result.data.next_cursor;
                         Logger.getInstance().withTag(TAG).log("loadFollowersList: nextCursor=" + nextCursor);
 
-                        followers.addAll(result.data.users);
+                        followers.addAll(followers.size() - 1, result.data.users);
+
+                        if (nextCursor == 0)
+                            followers.remove(followers.size() - 1);
 
                         followersView.hideIndicator();
                         followersView.showFollowersList(followers);

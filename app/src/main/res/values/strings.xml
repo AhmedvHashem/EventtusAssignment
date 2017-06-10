@@ -18,6 +18,6 @@
     <string name="acc_add">Add Account</string>
 
     <string name="profile_bio">Bio :</string>
-    <string name="follower">%s\'s Followers</string>
+    <string name="followers">%s\'s Followers</string>
 
 </resources>

@@ -125,8 +125,8 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
     @OnClick(R.id.switchLang)
     void onSwitchLang() {
         popupLang = new PopupMenu(this, switchLang, Gravity.END);
-        popupLang.getMenu().add("English");
-        popupLang.getMenu().add("Arabic");
+        popupLang.getMenu().add(getString(R.string.lang_english));
+        popupLang.getMenu().add(getString(R.string.lang_arabic));
         popupLang.setOnMenuItemClickListener(this);
         popupLang.show();
     }
@@ -134,8 +134,8 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
     @OnClick(R.id.switchAccounts)
     void onSwitchAccounts() {
         popupAccounts = new PopupMenu(this, switchAccounts, Gravity.START);
-        popupAccounts.getMenu().add("Add Account");
-        for (TwitterSession s :  TwitterCore.getInstance().getSessionManager().getSessionMap().values()) {
+        popupAccounts.getMenu().add(getString(R.string.acc_add));
+        for (TwitterSession s : TwitterCore.getInstance().getSessionManager().getSessionMap().values()) {
             Logger.getInstance().withTag(TAG).log("getSessionMap: " + s);
             popupAccounts.getMenu().add(Utils.getUsernameScreenDisplay(s.getUserName()));
         }
@@ -146,15 +146,15 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
     @Override
     public boolean onMenuItemClick(MenuItem item) {
 
-        if (item.getTitle().equals("English") && !AppLocal.getAppLocal().equals(AppLocal.PREF_LOCAL_ENGLISH)) {
+        if (item.getTitle().equals(getString(R.string.lang_english)) && !AppLocal.getAppLocal().equals(AppLocal.PREF_LOCAL_ENGLISH)) {
             AppLocal.setAppLocal(this, AppLocal.PREF_LOCAL_ENGLISH);
             recreate();
             return true;
-        } else if (item.getTitle().equals("Arabic") && !AppLocal.getAppLocal().equals(AppLocal.PREF_LOCAL_ARABIC)) {
+        } else if (item.getTitle().equals(getString(R.string.lang_arabic)) && !AppLocal.getAppLocal().equals(AppLocal.PREF_LOCAL_ARABIC)) {
             AppLocal.setAppLocal(this, AppLocal.PREF_LOCAL_ARABIC);
             recreate();
             return true;
-        } else if (item.getTitle().equals("Add Account")) {
+        } else if (item.getTitle().equals(getString(R.string.acc_add))) {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
             finish();
@@ -173,7 +173,7 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
 
     @Override
     public void setTitle(String username) {
-        toolbarTitle.setText(Utils.getUsernameScreenDisplay(username) + "'s Followers");
+        toolbarTitle.setText(getString(R.string.followers, Utils.getUsernameScreenDisplay(username)));
     }
 
     @Override

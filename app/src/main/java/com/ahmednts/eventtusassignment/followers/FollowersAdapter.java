@@ -2,11 +2,14 @@ package com.ahmednts.eventtusassignment.followers;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.ahmednts.eventtusassignment.R;
+import com.ahmednts.eventtusassignment.utils.UIUtils;
 import com.ahmednts.eventtusassignment.utils.Utils;
 import com.makeramen.roundedimageview.RoundedTransformationBuilder;
 import com.squareup.picasso.Picasso;
@@ -21,7 +24,10 @@ import butterknife.ButterKnife;
 /**
  * Created by AhmedNTS on 6/2/2017.
  */
-public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.FollowerViewHolder> {
+public class FollowersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+    public static final int VIEW_NORMAL = 1000;
+    public static final int VIEW_LOADING = 2000;
 
     private List<User> itemList;
     private FollowerItemClickListener followerItemClickListener;
@@ -32,14 +38,26 @@ public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.Foll
     }
 
     @Override
-    public FollowerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        android.view.View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_follower, parent, false);
-        return new FollowerViewHolder(layoutView, followerItemClickListener);
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        android.view.View layoutView;
+        if (viewType == VIEW_NORMAL) {
+            layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_follower, parent, false);
+            return new FollowerViewHolder(layoutView, followerItemClickListener);
+        } else {
+            layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_loading, parent, false);
+            return new LoadingViewHolder(layoutView);
+        }
     }
 
     @Override
-    public void onBindViewHolder(FollowerViewHolder holder, int position) {
-        holder.onBindView(this, position);
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof FollowerViewHolder)
+            ((FollowerViewHolder) holder).onBindView(this, position);
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return itemList.get(position) != null ? VIEW_NORMAL : VIEW_LOADING;
     }
 
     @Override
@@ -95,6 +113,19 @@ public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.Foll
             Utils.setText(profileBio, itemView.getContext().getString(R.string.profile_bio), follower.description, true);
 
             itemView.setOnClickListener(v -> followerItemClickListener.onFollowerClick(follower));
+        }
+    }
+
+    static class LoadingViewHolder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.progressBar)
+        ProgressBar progressBar;
+
+        public LoadingViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+
+            UIUtils.setProgressBarColor(itemView.getContext(), progressBar, R.color.colorAccent);
         }
     }
 
