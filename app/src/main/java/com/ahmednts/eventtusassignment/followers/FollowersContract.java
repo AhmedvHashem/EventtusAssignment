@@ -1,14 +1,15 @@
 package com.ahmednts.eventtusassignment.followers;
 
-import android.support.annotation.NonNull;
-
-import com.ahmednts.eventtusassignment.data.MyTwitterApiClient;
 import com.twitter.sdk.android.core.models.User;
 
 import java.util.List;
 
 /**
  * Created by AhmedNTS on 6/1/2017.
+ */
+
+/**
+ * This specifies the contract between the view and the presenter.
  */
 interface FollowersContract {
 

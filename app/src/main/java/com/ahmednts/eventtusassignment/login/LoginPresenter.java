@@ -17,7 +17,10 @@ import java.net.UnknownHostException;
 /**
  * Created by AhmedNTS on 6/6/2017.
  */
-
+/**
+ * Listens to user actions from the UI ({@link LoginActivity}), retrieves the data and updates the
+ * UI as required.
+ */
 public class LoginPresenter implements LoginContract.Presenter {
     private static final String TAG = LoginPresenter.class.getSimpleName();
 
@@ -48,6 +51,7 @@ public class LoginPresenter implements LoginContract.Presenter {
             public void failure(TwitterException exception) {
                 Logger.getInstance().withTag(TAG).log("failure: " + exception.getMessage());
 
+                //if there is no internet connection then display an error msg
                 if (exception.getCause() instanceof UnknownHostException) {
                     loginView.showNoNetworkMessage();
                 }

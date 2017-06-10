@@ -11,13 +11,13 @@ import java.util.Map;
  * Created by AhmedNTS on 6/9/2017.
  */
 
+/**
+ * Handles current active user and its associated ({@link TwitterSession} and {@link MyTwitterApiClient})
+ */
 public class UserManager {
     private static UserManager INSTANCE;
 
     private Context context;
-
-//    private MyTwitterApiClient apiClient;
-//    private TwitterSession activeSession;
 
     public static UserManager getInstance(Context context) {
         if (INSTANCE == null)

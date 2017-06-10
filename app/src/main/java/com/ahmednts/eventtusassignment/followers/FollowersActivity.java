@@ -41,6 +41,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/**
+ * Display a list of {@link User}s. for the current active {@link TwitterSession}.
+ */
 public class FollowersActivity extends AppCompatActivity implements FollowersContract.View, PopupMenu.OnMenuItemClickListener {
     private static final String TAG = FollowersActivity.class.getSimpleName();
 
@@ -81,6 +84,9 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
         followersPresenter.loadFollowersList(true);
     }
 
+    /**
+     * after the user clicked "Add Account" the activity is brought to front and onNewIntent called
+     */
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -128,6 +134,7 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
         });
     }
 
+    //show language options dropdown menu
     @OnClick(R.id.switchLang)
     void onSwitchLang() {
         popupLang = new PopupMenu(this, switchLang, Gravity.END);
@@ -137,6 +144,7 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
         popupLang.show();
     }
 
+    //show accounts options dropdown menu for switching account and/or adding new one
     @OnClick(R.id.switchAccounts)
     void onSwitchAccounts() {
         popupAccounts = new PopupMenu(this, switchAccounts, Gravity.START);
@@ -227,8 +235,7 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
         Snackbar.make(findViewById(android.R.id.content), getString(R.string.error_network), Snackbar.LENGTH_LONG).show();
     }
 
+    //Listener for clicks on Followers in RecyclerView and delegates it to the presenter
     FollowersAdapter.FollowerItemClickListener followerItemClickListener = follower ->
             followersPresenter.openFollowerDetails(follower);
-
-
 }

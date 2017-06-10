@@ -21,6 +21,10 @@ import retrofit2.Call;
  * Created by AhmedNTS on 6/6/2017.
  */
 
+/**
+ * Listens to user actions from the UI ({@link FollowersActivity}), retrieves the data and updates the
+ * UI as required.
+ */
 public class FollowersPresenter implements FollowersContract.Presenter {
     private static final String TAG = FollowersPresenter.class.getSimpleName();
 
@@ -39,19 +43,25 @@ public class FollowersPresenter implements FollowersContract.Presenter {
         this.followersView = followersView;
     }
 
+    //sets new active user after the user change it from the dropdown menu
     @Override
     public void setActiveUser(String username) {
         userManager.setActiveUser(username);
 
+        //reload followersList after active user has changed
         loadFollowersList(true);
     }
 
+    /**
+     * @param reload Pass in true to refresh the data in the.
+     */
     @Override
     public void loadFollowersList(boolean reload) {
         Logger.getInstance().withTag(TAG).log("loadFollowersList: userId=" + userManager.getActiveSession().getUserId());
 
         this.followersView.setTitle(userManager.getActiveSession().getUserName());
 
+        //if the list will reload reset current cursor to default and clear the list
         if (reload) {
             nextCursor = -1;
             followersView.showIndicator();
@@ -109,6 +119,9 @@ public class FollowersPresenter implements FollowersContract.Presenter {
         });
     }
 
+    /**
+     *  open {@link com.ahmednts.eventtusassignment.followerdetails.FollowerDetailsActivity} when user click on in in the list
+     */
     @Override
     public void openFollowerDetails(User follower) {
         followersView.openFollowerDetailsUI(follower);

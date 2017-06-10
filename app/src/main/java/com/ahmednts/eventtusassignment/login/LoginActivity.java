@@ -15,6 +15,9 @@ import com.twitter.sdk.android.core.identity.TwitterAuthClient;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/**
+ * Display a simple view allow user to login with his/her twitter accounts.
+ */
 public class LoginActivity extends AppCompatActivity implements LoginContract.View {
     private static final String TAG = LoginActivity.class.getSimpleName();
 
@@ -25,6 +28,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
+        // init the auth client from Twitter sdk
         TwitterAuthClient authClient = new TwitterAuthClient();
 
         loginPresenter = new LoginPresenter(this, authClient, this);
@@ -41,6 +45,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        //delegates auth client onActivityResult to the presenter to take actions upon
         loginPresenter.onActivityResult(requestCode, resultCode, data);
     }
 
@@ -49,6 +54,9 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         loginPresenter.authenticate();
     }
 
+    /**
+     * opens {@link FollowersActivity} to list this user's followers
+     */
     @Override
     public void showFollowers(long userId) {
         Logger.getInstance().withTag(TAG).log("showFollowers: " + userId);
