@@ -22,3 +22,4 @@ MVP (Model-View-Presenter) from [Google Android Architecture](https://github.com
 5. [Butterknife](http://jakewharton.github.io/butterknife/)
 6. [Parceler](https://github.com/johncarl81/parceler)
 7. [RoundedImageView](https://github.com/vinc3m1/RoundedImageView)
+8. [LeakCanary](https://github.com/square/leakcanary)
