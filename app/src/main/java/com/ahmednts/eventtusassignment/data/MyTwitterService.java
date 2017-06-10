@@ -9,7 +9,7 @@ import retrofit2.http.Query;
 /**
  * Created by AhmedNTS on 6/6/2017.
  */
-public interface MyTwitterCustomService {
+public interface MyTwitterService {
     @GET("/1.1/followers/list.json?count=25")
     Call<FollowersResponse> followers(@Query("user_id") long id, @Query("cursor") long cursor);
 }

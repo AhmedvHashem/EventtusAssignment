@@ -23,7 +23,9 @@ import com.ahmednts.eventtusassignment.utils.AppLocal;
 import com.ahmednts.eventtusassignment.utils.CircleTransform;
 import com.ahmednts.eventtusassignment.utils.UIUtils;
 import com.ahmednts.eventtusassignment.utils.Utils;
+import com.makeramen.roundedimageview.RoundedTransformationBuilder;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.core.models.Tweet;
 
@@ -120,10 +122,15 @@ public class FollowerDetailsActivity extends AppCompatActivity implements Follow
         toolbar.setTitle(followerInfo.getName());
         profileHandle.setText(Utils.getUsernameScreenDisplay(followerInfo.getUsername()));
 
+        Transformation transformation = new RoundedTransformationBuilder()
+                .cornerRadiusDp(5)
+                .oval(false)
+                .build();
+
         Picasso.with(this)
                 .load(followerInfo.getProfileImageUrl())
                 .placeholder(R.drawable.ic_profile_default)
-                .transform(new CircleTransform())
+                .transform(transformation)
                 .fit().centerCrop().into(profileImage);
 
         Picasso.with(this)

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/tw__login_btn_default"
-    tools:context="com.ahmednts.eventtusassignment.MainActivity">
+    tools:context="com.ahmednts.eventtusassignment.SplashActivity">
 
     <ImageView
         android:layout_width="wrap_content"

@@ -65,7 +65,7 @@ public class FollowersPresenter implements FollowersContract.Presenter {
 
         Logger.getInstance().withTag(TAG).log("loadFollowersList: nextCursor=" + nextCursor);
 
-        followersResponseCall = apiClient.getTwitterCustomService().followers(apiClient.getSession().getUserId(), nextCursor);
+        followersResponseCall = apiClient.getTwitterService().followers(apiClient.getSession().getUserId(), nextCursor);
         followersResponseCall.enqueue(new Callback<FollowersResponse>() {
             @Override
             public void success(Result<FollowersResponse> result) {

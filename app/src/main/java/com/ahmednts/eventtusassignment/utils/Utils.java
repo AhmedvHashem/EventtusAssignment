@@ -11,14 +11,14 @@ import android.widget.TextView;
 
 public class Utils {
 
-    public static void setText(TextView textView, String text, boolean hideIfEmpty) {
+    public static void setText(TextView textView, String prefix, String text, boolean hideIfEmpty) {
         textView.setVisibility(View.VISIBLE);
 
         if (text != null) {
             if (text.isEmpty() && hideIfEmpty)
                 textView.setVisibility(View.GONE);
             else
-                textView.setText(text);
+                textView.setText(prefix == null ? text : prefix + text);
         } else
             textView.setText("");
     }

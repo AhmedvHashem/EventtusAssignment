@@ -7,9 +7,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ahmednts.eventtusassignment.R;
-import com.ahmednts.eventtusassignment.utils.CircleTransform;
 import com.ahmednts.eventtusassignment.utils.Utils;
+import com.makeramen.roundedimageview.RoundedTransformationBuilder;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 import com.twitter.sdk.android.core.models.User;
 
 import java.util.List;
@@ -78,15 +79,20 @@ public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.Foll
         void onBindView(FollowersAdapter adapter, int position) {
             User follower = adapter.itemList.get(position);
 
+            Transformation transformation = new RoundedTransformationBuilder()
+                    .cornerRadiusDp(5)
+                    .oval(false)
+                    .build();
+
             Picasso.with(itemView.getContext())
                     .load(follower.profileImageUrlHttps)
                     .placeholder(R.drawable.ic_profile_default)
-                    .transform(new CircleTransform())
+                    .transform(transformation)
                     .fit().centerCrop().into(profileImage);
 
-            Utils.setText(profileFullName, follower.name, false);
-            Utils.setText(profileHandle, "@" + follower.screenName, false);
-            Utils.setText(profileBio, follower.description, true);
+            profileFullName.setText(follower.name);
+            profileHandle.setText(Utils.getUsernameScreenDisplay(follower.screenName));
+            Utils.setText(profileBio, itemView.getContext().getString(R.string.profile_bio), follower.description, true);
 
             itemView.setOnClickListener(v -> followerItemClickListener.onFollowerClick(follower));
         }

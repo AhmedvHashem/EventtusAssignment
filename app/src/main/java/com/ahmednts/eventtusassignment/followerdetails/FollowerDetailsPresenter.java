@@ -7,10 +7,8 @@ import com.ahmednts.eventtusassignment.data.followers.FollowerInfo;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterApiException;
-import com.twitter.sdk.android.core.TwitterCore;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.models.Tweet;
-import com.twitter.sdk.android.core.services.StatusesService;
 
 import java.net.UnknownHostException;
 import java.util.List;
@@ -27,16 +25,16 @@ public class FollowerDetailsPresenter implements FollowerDetailsContract.Present
     @NonNull
     private final FollowerDetailsContract.View followerDetailsView;
     @NonNull
-    MyTwitterApiClient myTwitterApiClient;
+    private MyTwitterApiClient myTwitterApiClient;
     @NonNull
     private final FollowerInfo followerInfo;
 
     private Call<List<Tweet>> followerLast10TweetsCall;
 
-    public FollowerDetailsPresenter(@NonNull FollowerInfo followerInfo,@NonNull MyTwitterApiClient myTwitterApiClient, @NonNull FollowerDetailsContract.View followerDetailsView) {
-        this.followerDetailsView = followerDetailsView;
-        this.myTwitterApiClient = myTwitterApiClient;
+    public FollowerDetailsPresenter(@NonNull FollowerInfo followerInfo, @NonNull MyTwitterApiClient myTwitterApiClient, @NonNull FollowerDetailsContract.View followerDetailsView) {
         this.followerInfo = followerInfo;
+        this.myTwitterApiClient = myTwitterApiClient;
+        this.followerDetailsView = followerDetailsView;
     }
 
     @Override
