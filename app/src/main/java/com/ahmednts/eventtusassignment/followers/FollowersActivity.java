@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.ahmednts.eventtusassignment.R;
 import com.ahmednts.eventtusassignment.data.MyTwitterApiClient;
+import com.ahmednts.eventtusassignment.data.UserManager;
 import com.ahmednts.eventtusassignment.data.followers.FollowerInfo;
 import com.ahmednts.eventtusassignment.followerdetails.FollowerDetailsActivity;
 import com.ahmednts.eventtusassignment.login.LoginActivity;
@@ -36,7 +37,6 @@ import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -69,8 +69,6 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
 
     boolean isLoading;
 
-    Map<Long, TwitterSession> sessions = TwitterCore.getInstance().getSessionManager().getSessionMap();
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         AppLocal.setAppLocal(getApplicationContext(), AppLocal.getAppLocal());
@@ -80,7 +78,7 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
 
         initUI();
 
-        followersPresenter = new FollowersPresenter(getCurrentApiClient(TwitterCore.getInstance().getSessionManager().getActiveSession()), this);
+        followersPresenter = new FollowersPresenter(UserManager.getInstance(this), this);
         followersPresenter.loadFollowersList(true);
     }
 
@@ -137,7 +135,7 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
     void onSwitchAccounts() {
         popupAccounts = new PopupMenu(this, switchAccounts, Gravity.START);
         popupAccounts.getMenu().add("Add Account");
-        for (TwitterSession s : sessions.values()) {
+        for (TwitterSession s :  TwitterCore.getInstance().getSessionManager().getSessionMap().values()) {
             Logger.getInstance().withTag(TAG).log("getSessionMap: " + s);
             popupAccounts.getMenu().add(Utils.getUsernameScreenDisplay(s.getUserName()));
         }
@@ -161,17 +159,7 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
             startActivity(intent);
             finish();
         } else {
-
-            for (TwitterSession s : sessions.values()) {
-                if (item.getTitle().equals(Utils.getUsernameScreenDisplay(s.getUserName()))) {
-                    Logger.getInstance().withTag(TAG).log("setActiveSession: " + s);
-                    TwitterCore.getInstance().getSessionManager().setActiveSession(s);
-                    break;
-                }
-            }
-
-            followersPresenter.setNewApiClient(getCurrentApiClient(TwitterCore.getInstance().getSessionManager().getActiveSession()));
-            followersPresenter.loadFollowersList(true);
+            followersPresenter.setActiveUser(item.getTitle().toString().replace("@", ""));
         }
 
         return false;

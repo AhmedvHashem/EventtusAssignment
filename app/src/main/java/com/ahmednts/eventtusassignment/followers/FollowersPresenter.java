@@ -2,7 +2,7 @@ package com.ahmednts.eventtusassignment.followers;
 
 import android.support.annotation.NonNull;
 
-import com.ahmednts.eventtusassignment.data.MyTwitterApiClient;
+import com.ahmednts.eventtusassignment.data.UserManager;
 import com.ahmednts.eventtusassignment.data.followers.FollowersResponse;
 import com.ahmednts.eventtusassignment.utils.Logger;
 import com.twitter.sdk.android.core.Callback;
@@ -25,7 +25,7 @@ public class FollowersPresenter implements FollowersContract.Presenter {
     private static final String TAG = FollowersPresenter.class.getSimpleName();
 
     @NonNull
-    private MyTwitterApiClient apiClient;
+    private final UserManager userManager;
 
     @NonNull
     private final FollowersContract.View followersView;
@@ -34,23 +34,23 @@ public class FollowersPresenter implements FollowersContract.Presenter {
     private long nextCursor = -1;
     private List<User> followers = new ArrayList<>(0);
 
-    public FollowersPresenter(@NonNull MyTwitterApiClient apiClient, @NonNull FollowersContract.View followersView) {
-        this.apiClient = apiClient;
+    public FollowersPresenter(@NonNull UserManager userManager, @NonNull FollowersContract.View followersView) {
+        this.userManager = userManager;
         this.followersView = followersView;
-
-        this.followersView.setTitle(apiClient.getSession().getUserName());
     }
 
     @Override
-    public void setNewApiClient(@NonNull MyTwitterApiClient apiClient) {
-        this.apiClient = apiClient;
+    public void setActiveUser(String username) {
+        userManager.setActiveUser(username);
 
-        this.followersView.setTitle(apiClient.getSession().getUserName());
+        loadFollowersList(true);
     }
 
     @Override
     public void loadFollowersList(boolean reload) {
-        Logger.getInstance().withTag(TAG).log("loadFollowersList: userId=" + apiClient.getSession().getUserId());
+        Logger.getInstance().withTag(TAG).log("loadFollowersList: userId=" + userManager.getActiveSession().getUserId());
+
+        this.followersView.setTitle(userManager.getActiveSession().getUserName());
 
         if (reload) {
             nextCursor = -1;
@@ -65,7 +65,7 @@ public class FollowersPresenter implements FollowersContract.Presenter {
 
         Logger.getInstance().withTag(TAG).log("loadFollowersList: nextCursor=" + nextCursor);
 
-        followersResponseCall = apiClient.getTwitterService().followers(apiClient.getSession().getUserId(), nextCursor);
+        followersResponseCall = userManager.getActiveApiClient().getTwitterService().followers(userManager.getActiveSession().getUserId(), nextCursor);
         followersResponseCall.enqueue(new Callback<FollowersResponse>() {
             @Override
             public void success(Result<FollowersResponse> result) {

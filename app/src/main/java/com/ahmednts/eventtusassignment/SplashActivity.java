@@ -18,7 +18,6 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        TwitterSession session = TwitterCore.getInstance().getSessionManager().getActiveSession();
         if (UserManager.getInstance(this).isLoggedIn()) {
             Intent intent = new Intent(this, FollowersActivity.class);
             startActivity(intent);

@@ -34,10 +34,11 @@ interface FollowersContract {
 
     interface Presenter {
 
-        void setNewApiClient(@NonNull MyTwitterApiClient apiClient);
         void loadFollowersList(boolean reload);
 
         void openFollowerDetails(User follower);
+
+        void setActiveUser(String userName);
 
         void stop();
     }

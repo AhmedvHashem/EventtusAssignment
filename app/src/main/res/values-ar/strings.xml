@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <string name="login">أدخل بحساب تويتر</string>
+    <string name="title_login">الدخول</string>
+
     <string name="error_network">لا يوجد أتصال بالشبكة!</string>
     <string name="error_authorization">تم رفض السماح بالدخول</string>
 
@@ -10,4 +14,5 @@
 
     <string name="profile_bio">تفاصيل :</string>
 
+    <string name="followers">%s متابعين</string>
 </resources>

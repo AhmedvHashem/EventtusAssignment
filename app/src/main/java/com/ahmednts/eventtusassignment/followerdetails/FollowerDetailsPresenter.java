@@ -3,6 +3,7 @@ package com.ahmednts.eventtusassignment.followerdetails;
 import android.support.annotation.NonNull;
 
 import com.ahmednts.eventtusassignment.data.MyTwitterApiClient;
+import com.ahmednts.eventtusassignment.data.UserManager;
 import com.ahmednts.eventtusassignment.data.followers.FollowerInfo;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
@@ -25,15 +26,15 @@ public class FollowerDetailsPresenter implements FollowerDetailsContract.Present
     @NonNull
     private final FollowerDetailsContract.View followerDetailsView;
     @NonNull
-    private MyTwitterApiClient myTwitterApiClient;
+    private final UserManager userManager;
     @NonNull
     private final FollowerInfo followerInfo;
 
     private Call<List<Tweet>> followerLast10TweetsCall;
 
-    public FollowerDetailsPresenter(@NonNull FollowerInfo followerInfo, @NonNull MyTwitterApiClient myTwitterApiClient, @NonNull FollowerDetailsContract.View followerDetailsView) {
+    public FollowerDetailsPresenter(@NonNull FollowerInfo followerInfo, @NonNull UserManager userManager, @NonNull FollowerDetailsContract.View followerDetailsView) {
         this.followerInfo = followerInfo;
-        this.myTwitterApiClient = myTwitterApiClient;
+        this.userManager = userManager;
         this.followerDetailsView = followerDetailsView;
     }
 
@@ -47,7 +48,7 @@ public class FollowerDetailsPresenter implements FollowerDetailsContract.Present
     private void loadLastTweets() {
         followerDetailsView.showIndicator();
 
-        followerLast10TweetsCall = myTwitterApiClient.getStatusesService().userTimeline(
+        followerLast10TweetsCall = userManager.getActiveApiClient().getStatusesService().userTimeline(
                 followerInfo.getId(), null, 10, null, null, null, true, null, null);
         followerLast10TweetsCall.enqueue(new Callback<List<Tweet>>() {
             @Override

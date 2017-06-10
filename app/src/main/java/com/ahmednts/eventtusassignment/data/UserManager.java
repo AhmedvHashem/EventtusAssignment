@@ -38,13 +38,14 @@ public class UserManager {
     }
 
     public MyTwitterApiClient getActiveApiClient() {
+        TwitterCore.getInstance().addApiClient(getActiveSession(), new MyTwitterApiClient(context, getActiveSession()));
         return (MyTwitterApiClient) TwitterCore.getInstance().getApiClient();
     }
 
     public void setActiveUser(String username) {
         Map<Long, TwitterSession> sessions = TwitterCore.getInstance().getSessionManager().getSessionMap();
         for (TwitterSession s : sessions.values()) {
-            if (username.replace("@", "").equals(s.getUserName())) {
+            if (username.equals(s.getUserName())) {
                 TwitterCore.getInstance().getSessionManager().setActiveSession(s);
                 TwitterCore.getInstance().addApiClient(s, new MyTwitterApiClient(context, s));
                 break;

@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.ahmednts.eventtusassignment.R;
 import com.ahmednts.eventtusassignment.data.MyTwitterApiClient;
+import com.ahmednts.eventtusassignment.data.UserManager;
 import com.ahmednts.eventtusassignment.data.followers.FollowerInfo;
 import com.ahmednts.eventtusassignment.utils.AppLocal;
 import com.ahmednts.eventtusassignment.utils.CircleTransform;
@@ -79,9 +80,7 @@ public class FollowerDetailsActivity extends AppCompatActivity implements Follow
 
         FollowerInfo followerInfo = Parcels.unwrap(getIntent().getParcelableExtra(EXTRA_FOLLOWER));
 
-        MyTwitterApiClient myTwitterApiClient = (MyTwitterApiClient) TwitterCore.getInstance().getApiClient();
-
-        followerDetailsPresenter = new FollowerDetailsPresenter(followerInfo, myTwitterApiClient, this);
+        followerDetailsPresenter = new FollowerDetailsPresenter(followerInfo, UserManager.getInstance(this), this);
         followerDetailsPresenter.start();
     }
 

@@ -51,8 +51,6 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
     @Override
     public void showFollowers(long userId) {
-        //open followers activity
-
         Logger.getInstance().withTag(TAG).log("showFollowers: " + userId);
 
         Intent intent = new Intent(this, FollowersActivity.class);
