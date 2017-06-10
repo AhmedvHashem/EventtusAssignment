@@ -30,11 +30,11 @@ MVP (Model-View-Presenter) from [Google Android Architecture](https://github.com
 2. **Picasso**: again from Square, Inc. comes the Image loading library. Many common pitfalls of image loading are handled by Picasso like 
 - Memory caching out of the box with the help of OkHttp
 - customizable complex image transformation 
-- download cancelation in an adapter hassle-free
+- download cancellation in an adapter hassle-free
 
 3. **Parceler**: using Annotations it allows you to convert you POJO to a Parcelable object and using it is much faster than using Serialization as Parcelables does not use reflection.
 
-4. **Butterknife**: view injection can never be easer. it reduce the amount of boilerplate code for just initilize views and hooking view event like OnClick.
+4. **Butterknife**: view injection can never be easer. it reduce the amount of boilerplate code for just initialize views and hooking view event like OnClick.
 
 5. **LeakCanary**: the nightmare catcher. it catches MemoryLeaks on the fly and alert you with the leak details in a push notification msg, neat hah.
 
