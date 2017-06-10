@@ -24,6 +24,7 @@ a simple twitter client for android using TwitterKit SDK
 6. [Parceler](https://github.com/johncarl81/parceler)
 7. [RoundedImageView](https://github.com/vinc3m1/RoundedImageView)
 8. [LeakCanary](https://github.com/square/leakcanary)
+9. [Stetho](http://facebook.github.io/stetho/)
 
 # Why
 1. **Retrofit**: Type-safe HTTP client for Android and Java by Square, Inc. with retrofit we can easly call web apis and with the help of Gson we can parse JSON and capture JSON from the response body, all we need to deal with is just a plain java objects (POJO) files
@@ -39,7 +40,7 @@ a simple twitter client for android using TwitterKit SDK
 
 5. **LeakCanary**: the nightmare catcher. it catches MemoryLeaks on the fly and alert you with the leak details in a push notification msg, neat hah.
 
-
+6. **Stetho**: helps in network inspection that saves countless hours between mobile and backend teams
 
 
 
