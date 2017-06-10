@@ -19,7 +19,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ahmednts.eventtusassignment.R;
-import com.ahmednts.eventtusassignment.data.MyTwitterApiClient;
 import com.ahmednts.eventtusassignment.data.UserManager;
 import com.ahmednts.eventtusassignment.data.followers.FollowerInfo;
 import com.ahmednts.eventtusassignment.followerdetails.FollowerDetailsActivity;
@@ -79,6 +78,13 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
         initUI();
 
         followersPresenter = new FollowersPresenter(UserManager.getInstance(this), this);
+        followersPresenter.loadFollowersList(true);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
         followersPresenter.loadFollowersList(true);
     }
 
@@ -157,18 +163,13 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
         } else if (item.getTitle().equals(getString(R.string.acc_add))) {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
-            finish();
-        } else {
+            return true;
+        } else if (item.getTitle().toString().startsWith("@")) {
             followersPresenter.setActiveUser(item.getTitle().toString().replace("@", ""));
+            return true;
         }
 
         return false;
-    }
-
-    MyTwitterApiClient getCurrentApiClient(TwitterSession activeSession) {
-        MyTwitterApiClient myTwitterApiClient = new MyTwitterApiClient(getApplicationContext(), activeSession);
-        TwitterCore.getInstance().addApiClient(activeSession, myTwitterApiClient);
-        return myTwitterApiClient;
     }
 
     @Override

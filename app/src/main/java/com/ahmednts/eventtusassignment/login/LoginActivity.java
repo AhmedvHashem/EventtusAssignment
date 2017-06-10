@@ -54,6 +54,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         Logger.getInstance().withTag(TAG).log("showFollowers: " + userId);
 
         Intent intent = new Intent(this, FollowersActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
         finish();
     }
