@@ -102,8 +102,6 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
     }
 
     void initUI() {
-        registerForContextMenu(recyclerView);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
@@ -188,7 +186,6 @@ public class FollowersActivity extends AppCompatActivity implements FollowersCon
     @Override
     public void showFollowersList(List<User> users) {
         rcAdapter.replaceData(users);
-        rcAdapter.notifyDataSetChanged();
     }
 
     @Override

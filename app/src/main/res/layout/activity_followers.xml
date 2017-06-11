@@ -80,7 +80,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="You have no followers"
+                android:text="@string/msg_no_followers"
                 android:visibility="gone" />
 
             <android.support.v7.widget.RecyclerView
