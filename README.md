@@ -1,4 +1,7 @@
 # EventtusAssignment
+
+<img src="https://github.com/AhmedHashemNTS/EventtusAssignment/blob/master/images/1.png" width="200"> <img src="https://github.com/AhmedHashemNTS/EventtusAssignment/blob/master/images/2.png" width="200"> <img src="https://github.com/AhmedHashemNTS/EventtusAssignment/blob/master/images/3.png" width="200">
+
 a simple twitter client for android using TwitterKit SDK 
 
 # Features
