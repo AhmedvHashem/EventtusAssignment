@@ -21,7 +21,7 @@ public class UserManager {
 
     public static UserManager getInstance(Context context) {
         if (INSTANCE == null)
-            INSTANCE = new UserManager(context);
+            INSTANCE = new UserManager(context.getApplicationContext());
 
         return INSTANCE;
     }
@@ -30,7 +30,7 @@ public class UserManager {
     }
 
     private UserManager(Context context) {
-        this.context = context.getApplicationContext();
+        this.context = context;
     }
 
     public TwitterSession getActiveSession() {
