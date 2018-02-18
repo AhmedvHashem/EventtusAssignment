@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Eventtus Assignment</string>
+
+    <string name="login">Login with Twitter</string>
+    <string name="title_login">Login</string>
+
+    <string name="error_network">No network connection!</string>
+    <string name="error_authorization">Authorization failed! make sure your account is unlocked</string>
+
+    <string name="msg_no_followers">You have no followers! Yet</string>
+    <string name="msg_api_limit_exceeded">Too many requests, your API limit exceeded!</string>
+    <string name="msg_no_tweets">There are no tweets!</string>
+
+    <string name="lang_english">English</string>
+    <string name="lang_arabic">UK</string>
+
+    <string name="acc_add">Add Accounto</string>
+
+    <string name="profile_bio">CV :</string>
+    <string name="followers">%s\'s Followers</string>
+</resources>
